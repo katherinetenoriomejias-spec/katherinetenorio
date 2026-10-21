@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { profile, proposal, services, collaborations, gallery, purpose } from '../content/kit';
+import { getStats } from '../lib/stats';
+
+const stats = await getStats(Astro.url.origin);
+
+const fmt = (value: number | null) =>
+  value === null ? '—' : new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+---
+
+<Layout>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Media kit · {new Date().getFullYear()}</span>
+        <h1>{profile.name}</h1>
+        <p class="lead">{profile.tagline}</p>
+        <div class="hero-actions">
+          <a class="btn btn-pink" href="#contacto">Trabajemos juntos</a>
+          <a class="btn btn-ghost" href="#stats">Ver estadísticas</a>
+        </div>
+        <div class="meta-row">
+          <div><b>{profile.location}</b>Base</div>
+          <div><b>{profile.languages.join(' · ')}</b>Idiomas</div>
+          <div><b>{profile.social.instagram}</b>Instagram</div>
+          <div><b>{profile.social.tiktok}</b>TikTok</div>
+        </div>
+      </div>
+      <img
+        class="hero-photo"
+        src={profile.photo}
+        alt={`${profile.name}, ${profile.role}`}
+        loading="eager"
+        width="880"
+        height="1100"
+      />
+    </div>
+  </section>
+
+  <!-- ESTADÍSTICAS -->
+  <section id="stats">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">En números</span>
+        <h2>Estadísticas reales, siempre actualizadas</h2>
+        <p class="lead">
+          Las cifras se leen directamente de Instagram y TikTok. Se refrescan solas mientras
+          estás en la página.
+        </p>
+      </div>
+
+      <div class="stats-panel" data-stats>
+        <div>
+          <div class="stats-head">
+            <h3>Instagram</h3>
+            <span class="live-dot" data-live="instagram"><i></i><span data-live-label>En vivo</span></span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat"><b data-stat="instagram.followers">{fmt(stats.instagram.followers)}</b><span>Seguidores</span></div>
+            <div class="stat"><b data-stat="instagram.reach">{fmt(stats.instagram.reach)}</b><span>Alcance</span></div>
+            <div class="stat"><b data-stat="instagram.impressions">{fmt(stats.instagram.impressions)}</b><span>Impresiones</span></div>
+            <div class="stat"><b data-stat="instagram.views">{fmt(stats.instagram.views)}</b><span>Visualizaciones</span></div>
+            <div class="stat"><b data-stat="instagram.engagement">{stats.instagram.engagement !== null ? `${stats.instagram.engagement}%` : '—'}</b><span>Engagement</span></div>
+            <div class="stat"><b data-stat="instagram.growth">{stats.instagram.growth !== null ? `${stats.instagram.growth}%` : '—'}</b><span>Crecimiento</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="stats-head">
+            <h3>TikTok</h3>
+            <span class="live-dot" data-live="tiktok"><i></i><span data-live-label>En vivo</span></span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat"><b data-stat="tiktok.followers">{fmt(stats.tiktok.followers)}</b><span>Seguidores</span></div>
+            <div class="stat"><b data-stat="tiktok.views">{fmt(stats.tiktok.views)}</b><span>Visualizaciones</span></div>
+            <div class="stat"><b data-stat="tiktok.reach">{fmt(stats.tiktok.reach)}</b><span>Alcance</span></div>
+            <div class="stat"><b data-stat="tiktok.engagement">{stats.tiktok.engagement !== null ? `${stats.tiktok.engagement}%` : '—'}</b><span>Engagement</span></div>
+            <div class="stat"><b data-stat="tiktok.growth">{stats.tiktok.growth !== null ? `${stats.tiktok.growth}%` : '—'}</b><span>Crecimiento</span></div>
+            <div class="stat"><b data-stat="tiktok.posts">{fmt(stats.tiktok.posts)}</b><span>Videos</span></div>
+          </div>
+        </div>
+
+        <p class="stats-foot" style="grid-column: 1 / -1;">
+          Actualizado el <span data-updated>{new Date(stats.updatedAt).toLocaleString('es-ES')}</span>.
+          Los datos de esta web se leen de las APIs oficiales de cada plataforma.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPUESTA -->
+  <section id="propuesta" style="background: var(--paper-2);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Mi propuesta</span>
+        <h2>Áreas en las que trabajo</h2>
+        <p class="lead">
+          Todo lo que produzco nace de la experiencia propia y de una audiencia real en
+          {stats.instagram.audience ?? 'Venezuela, México y Chile'}.
+        </p>
+      </div>
+      <div class="proposal-list">
+        {proposal.map((item) => (
+          <article class="proposal-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Servicios</span>
+        <h2>Cómo podemos trabajar juntos</h2>
+      </div>
+      <div class="grid grid-3">
+        {services.map((service) => (
+          <article class="card">
+            <span class="tag">Servicio</span>
+            <h3>{service.title}</h3>
+            <p>{service.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPÓSITO -->
+  <section id="proposito">
+    <div class="container">
+      <div class="purpose">
+        <span class="eyebrow">Propósito</span>
+        <h2>{purpose.title}</h2>
+        <blockquote>“{purpose.text}”</blockquote>
+        <p style="color: var(--muted); max-width: 62ch;">{purpose.body}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLABORACIONES -->
+  <section id="colaboraciones" style="background: var(--paper-2);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Colaboraciones</span>
+        <h2>Colaboraciones que dejaron huella</h2>
+      </div>
+      <div class="grid grid-2">
+        {collaborations.map((colab) => (
+          <article class="card colab">
+            <img src={colab.image} alt={`${colab.brand} — ${colab.campaign}`} loading="lazy" width="640" height="400" />
+            <div class="body">
+              <span class="type">{colab.type}</span>
+              <h3>{colab.brand}</h3>
+              <p style="color: var(--muted); margin: 0;">{colab.campaign}</p>
+              <p style="color: var(--muted); margin: 0;">{colab.description}</p>
+              <p class="result">Resultado: {colab.result}</p>
+              {colab.href && <a href={colab.href} target="_blank" rel="noopener">Ver proyecto ↗</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section id="galeria">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Galería</span>
+        <h2>Imágenes para prensa y marcas</h2>
+      </div>
+      <div class="gallery">
+        {gallery.map((item) => (
+          <figure>
+            <img src={item.src} alt={item.alt} loading="lazy" width="600" height="600" />
+            <figcaption>{item.alt}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" style="background: var(--plum); color: #f7f2f8;">
+    <div class="container contact-grid">
+      <div>
+        <span class="eyebrow">Contacto</span>
+        <h2>¿Tienes una marca, campaña o proyecto?</h2>
+        <p class="lead" style="color: #d7c9db;">
+          ¿Quieres convertirlo en una experiencia real e inclusiva? Escríbeme y lo
+          charlamos. Respondo en menos de 24 horas.
+        </p>
+        <div class="contact-list" style="margin-top: 1.6rem;">
+          <a href={`mailto:${profile.email}`}>
+            <span><b>Email</b>{profile.email}</span>
+          </a>
+          <a href={profile.whatsappUrl} target="_blank" rel="noopener">
+            <span><b>WhatsApp</b>{profile.whatsapp}</span>
+          </a>
+          <a href={profile.social.instagramUrl} target="_blank" rel="noopener">
+            <span><b>Instagram</b>{profile.social.instagram}</span>
+          </a>
+          <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">
+            <span><b>TikTok</b>{profile.social.tiktok}</span>
+          </a>
+        </div>
+      </div>
+
+      <form id="contact-form" action={`mailto:${profile.email}`} method="post" enctype="text/plain">
+        <label>
+          Nombre
+          <input type="text" name="nombre" required autocomplete="name" />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label>
+          Marca o proyecto
+          <input type="text" name="marca" autocomplete="organization" />
+        </label>
+        <label>
+          Cuéntame
+          <textarea name="mensaje" required></textarea>
+        </label>
+        <button class="btn btn-pink" type="submit">Enviar mensaje</button>
+        <p class="form-note" style="color: #b9a7be;">
+          Al enviar se abre tu correo con el mensaje listo para enviar.
+        </p>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Refresco automático de las estadísticas cada 5 minutos.
+  const compact = (value: number | null) =>
+    value === null
+      ? '—'
+      : new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+
+  async function refresh() {
+    try {
+      const res = await fetch('/api/stats');
+      if (!res.ok) return;
+      const data = await res.json();
+      document.querySelectorAll<HTMLElement>('[data-stat]').forEach((node) => {
+        const key = node.dataset.stat!;
+        const [network, metric] = key.split('.');
+        const value = data?.[network]?.[metric];
+        if (value === null || value === undefined) {
+          node.textContent = metric === 'engagement' || metric === 'growth' ? '—' : '—';
+          return;
+        }
+        node.textContent =
+          metric === 'engagement' || metric === 'growth' ? `${value}%` : compact(value);
+      });
+      document.querySelectorAll<HTMLElement>('[data-live]').forEach((node) => {
+        const network = node.dataset.live!;
+        const live = Boolean(data?.[network]?.followers);
+        node.classList.toggle('offline', !live);
+        const label = node.querySelector('[data-live-label]');
+        if (label) label.textContent = live ? 'En vivo' : 'Último dato';
+      });
+      const updated = document.querySelector('[data-updated]');
+      if (updated && data?.updatedAt) {
+        updated.textContent = new Date(data.updatedAt).toLocaleString('es-ES');
+      }
+    } catch {
+      /* sin red: se conservan los datos del servidor */
+    }
+  }
+
+  refresh();
+  setInterval(refresh, 5 * 60 * 1000);
+</script>

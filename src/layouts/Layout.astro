@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { profile } from '../content/kit';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = `${profile.name} — Media Kit`,
+  description = profile.tagline,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="profile" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container inner">
+        <a class="brand" href="#top">{profile.name.split(' ')[0]}<span>.</span></a>
+        <nav class="nav-links" aria-label="Secciones del media kit">
+          <a href="#stats">Estadísticas</a>
+          <a href="#propuesta">Propuesta</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#colaboraciones">Colaboraciones</a>
+          <a href="#galeria">Galería</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+        <a class="btn btn-pink" href="#contacto">Trabajemos juntos</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <slot />
+    </main>
+
+    <footer>
+      <div class="container inner">
+        <span>© {new Date().getFullYear()} {profile.name} — Media kit</span>
+        <div class="social">
+          <a href={profile.social.instagramUrl} target="_blank" rel="noopener">{profile.social.instagram}</a>
+          <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">{profile.social.tiktok}</a>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
