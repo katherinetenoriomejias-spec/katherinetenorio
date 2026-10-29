@@ -1,0 +1,48 @@
+---
+import type { Collaboration } from '../content/kit';
+
+interface Props {
+  colab: Collaboration;
+}
+const { colab } = Astro.props;
+---
+
+<article class="card colab" data-collab={colab.brand}>
+  <div class="colab-media" data-media>
+    {colab.video ? (
+      <video
+        class="colab-video"
+        data-video
+        src={colab.video.src}
+        poster={colab.image}
+        controls
+        preload="none"
+        playsinline
+        aria-label={`Video de ${colab.brand}`}
+      />
+    ) : (
+      <img
+        src={colab.image}
+        alt={`${colab.brand} — ${colab.campaign}`}
+        loading="lazy"
+        width="1200"
+        height="900"
+      />
+    )}
+  </div>
+  <div class="body">
+    {colab.type && <span class="type">{colab.type}</span>}
+    <h3>{colab.brand}</h3>
+    {colab.campaign && <p style="color: var(--muted); margin: 0;">{colab.campaign}</p>}
+    {colab.description && <p style="color: var(--muted); margin: 0;">{colab.description}</p>}
+    {colab.result && <p class="result">Resultado: {colab.result}</p>}
+    <div class="colab-foot">
+      {colab.video?.url && (
+        <a href={colab.video.url} target="_blank" rel="noopener">
+          Ver en la red ↗
+        </a>
+      )}
+      {colab.href && <a href={colab.href} target="_blank" rel="noopener">Ver proyecto ↗</a>}
+    </div>
+  </div>
+</article>

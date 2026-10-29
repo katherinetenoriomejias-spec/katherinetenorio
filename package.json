@@ -7,10 +7,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "bun run scripts/check-stats.mjs",
     "astro": "astro"
   },
+  "devDependencies": {
+    "@types/node": "^26.6.6"
+  },
   "dependencies": {
-    "@astrojs/vercel": "^8.0.0",
-    "astro": "^5.0.0"
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.2"
   }
 }

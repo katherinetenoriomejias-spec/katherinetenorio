@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { profile, proposal, services, collaborations, gallery, purpose } from '../content/kit';
+import CollabCard from '../components/CollabCard.astro';
+import { profile, proposal, services, collaborations, packages, purpose } from '../content/kit';
 import { getStats } from '../lib/stats';
 
 const stats = await getStats(Astro.url.origin);
@@ -12,31 +13,57 @@ const fmt = (value: number | null) =>
 <Layout>
   <!-- HERO -->
   <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <span class="eyebrow">Media kit · {new Date().getFullYear()}</span>
+    <div class="container">
+      <div class="hero-intro">
+        <span class="eyebrow">Media kit</span>
         <h1>{profile.name}</h1>
         <p class="lead">{profile.tagline}</p>
-        <div class="hero-actions">
-          <a class="btn btn-pink" href="#contacto">Trabajemos juntos</a>
-          <a class="btn btn-ghost" href="#stats">Ver estadísticas</a>
-        </div>
-        <div class="meta-row">
-          <div><b>{profile.location}</b>Base</div>
-          <div><b>{profile.languages.join(' · ')}</b>Idiomas</div>
-          <div><b>{profile.social.instagram}</b>Instagram</div>
-          <div><b>{profile.social.tiktok}</b>TikTok</div>
-        </div>
       </div>
-      <img
-        class="hero-photo"
-        src={profile.photo}
-        alt={`${profile.name}, ${profile.role}`}
-        loading="eager"
-        width="880"
-        height="1100"
-      />
-    </div>
+
+      <div class="hero-gallery" data-gallery>
+        <div class="hero-track" data-track>
+          {profile.photos.map((photo, index) => (
+            <figure class="hero-shot" data-shot={index}>
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                loading={index < 3 ? 'eager' : 'lazy'}
+                width="800"
+                height="1200"
+              />
+            </figure>
+          ))}
+        </div>
+        <div class="hero-dots" data-dots hidden></div>
+      </div>
+
+      <div class="meta-row">
+        <b class="meta-value">Ciudad de México</b>
+        <b class="meta-value">{profile.languages.join(' · ')}</b>
+        <b class="meta-value">@{profile.social.instagram.replace('@', '')}</b>
+        <span class="meta-label">Base</span>
+        <span class="meta-label">Idiomas</span>
+        <span class="meta-label">Redes sociales</span>
+        <span class="social-btns">
+          <a href={profile.social.instagramUrl} target="_blank" rel="noopener" aria-label={`Instagram de ${profile.name}`}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" />
+            </svg>
+            Instagram
+          </a>
+          <a href={profile.social.tiktokUrl} target="_blank" rel="noopener" aria-label={`TikTok de ${profile.name}`}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path
+                d="M14 3h2.2a5.6 5.6 0 0 0 4.3 4.3v2.3a7.9 7.9 0 0 1-4.3-1.3v5.9A5.7 5.7 0 1 1 10 8.5v2.4a3.4 3.4 0 1 0 3.7 3.4V3Z"
+                fill="currentColor"
+              />
+            </svg>
+            TikTok
+          </a>
+        </span>
+      </div>      </div>    </div>
   </section>
 
   <!-- ESTADÍSTICAS -->
@@ -45,48 +72,73 @@ const fmt = (value: number | null) =>
       <div class="section-head">
         <span class="eyebrow">En números</span>
         <h2>Estadísticas reales, siempre actualizadas</h2>
-        <p class="lead">
-          Las cifras se leen directamente de Instagram y TikTok. Se refrescan solas mientras
-          estás en la página.
+        <p class="lead stats-lead">
+          Las cifras se leen directamente de Instagram y TikTok. Se refrescan solas mientras estás en la página.
         </p>
       </div>
 
-      <div class="stats-panel" data-stats>
-        <div>
-          <div class="stats-head">
-            <h3>Instagram</h3>
-            <span class="live-dot" data-live="instagram"><i></i><span data-live-label>En vivo</span></span>
-          </div>
-          <div class="stat-grid">
-            <div class="stat"><b data-stat="instagram.followers">{fmt(stats.instagram.followers)}</b><span>Seguidores</span></div>
-            <div class="stat"><b data-stat="instagram.reach">{fmt(stats.instagram.reach)}</b><span>Alcance</span></div>
-            <div class="stat"><b data-stat="instagram.impressions">{fmt(stats.instagram.impressions)}</b><span>Impresiones</span></div>
-            <div class="stat"><b data-stat="instagram.views">{fmt(stats.instagram.views)}</b><span>Visualizaciones</span></div>
-            <div class="stat"><b data-stat="instagram.engagement">{stats.instagram.engagement !== null ? `${stats.instagram.engagement}%` : '—'}</b><span>Engagement</span></div>
-            <div class="stat"><b data-stat="instagram.growth">{stats.instagram.growth !== null ? `${stats.instagram.growth}%` : '—'}</b><span>Crecimiento</span></div>
-          </div>
+      <div class="social-box social-box-total" data-stats>
+        <div class="stats-head">
+          <h3>Total redes sociales</h3>
+          <span class="live-dot" data-live="total"><i></i><span data-live-label>En vivo</span></span>
         </div>
-
-        <div>
-          <div class="stats-head">
-            <h3>TikTok</h3>
-            <span class="live-dot" data-live="tiktok"><i></i><span data-live-label>En vivo</span></span>
-          </div>
-          <div class="stat-grid">
-            <div class="stat"><b data-stat="tiktok.followers">{fmt(stats.tiktok.followers)}</b><span>Seguidores</span></div>
-            <div class="stat"><b data-stat="tiktok.views">{fmt(stats.tiktok.views)}</b><span>Visualizaciones</span></div>
-            <div class="stat"><b data-stat="tiktok.reach">{fmt(stats.tiktok.reach)}</b><span>Alcance</span></div>
-            <div class="stat"><b data-stat="tiktok.engagement">{stats.tiktok.engagement !== null ? `${stats.tiktok.engagement}%` : '—'}</b><span>Engagement</span></div>
-            <div class="stat"><b data-stat="tiktok.growth">{stats.tiktok.growth !== null ? `${stats.tiktok.growth}%` : '—'}</b><span>Crecimiento</span></div>
-            <div class="stat"><b data-stat="tiktok.posts">{fmt(stats.tiktok.posts)}</b><span>Videos</span></div>
-          </div>
-        </div>
-
-        <p class="stats-foot" style="grid-column: 1 / -1;">
-          Actualizado el <span data-updated>{new Date(stats.updatedAt).toLocaleString('es-ES')}</span>.
-          Los datos de esta web se leen de las APIs oficiales de cada plataforma.
+        <p class="stats-hero">
+          <b data-stat="total.followers">{fmt(stats.total.followers)}</b>
+          <span>Instagram + TikTok</span>
         </p>
       </div>
+
+      <div class="social-box" data-stats>
+        <div class="stats-head">
+          <h3>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" />
+            </svg>
+            Instagram
+          </h3>
+          <span class="live-dot" data-live="instagram"><i></i><span data-live-label>En vivo</span></span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><b data-stat="instagram.followers">{fmt(stats.instagram.followers)}</b><span>Seguidores</span></div>
+          <div class="stat"><b data-stat="instagram.reach">{fmt(stats.instagram.reach)}</b><span>Alcance</span></div>
+          <div class="stat"><b data-stat="instagram.impressions">{fmt(stats.instagram.impressions)}</b><span>Impresiones</span></div>
+          <div class="stat"><b data-stat="instagram.views">{fmt(stats.instagram.views)}</b><span>Visualizaciones</span></div>
+          <div class="stat"><b data-stat="instagram.engagement">{stats.instagram.engagement !== null ? `${stats.instagram.engagement}%` : '—'}</b><span>Engagement</span></div>
+          <div class="stat"><b data-stat="instagram.growth">{stats.instagram.growth !== null ? `${stats.instagram.growth}%` : '—'}</b><span>Crecimiento</span></div>
+          <div class="stat"><b data-stat="instagram.posts">{fmt(stats.instagram.posts)}</b><span>Publicaciones</span></div>
+        </div>
+      </div>
+
+      <div class="social-box" data-stats>
+        <div class="stats-head">
+          <h3>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                d="M14 3h2.2a5.6 5.6 0 0 0 4.3 4.3v2.3a7.9 7.9 0 0 1-4.3-1.3v5.9A5.7 5.7 0 1 1 10 8.5v2.4a3.4 3.4 0 1 0 3.7 3.4V3Z"
+                fill="currentColor"
+              />
+            </svg>
+            TikTok
+          </h3>
+          <span class="live-dot" data-live="tiktok"><i></i><span data-live-label>En vivo</span></span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><b data-stat="tiktok.followers">{fmt(stats.tiktok.followers)}</b><span>Seguidores</span></div>
+          <div class="stat"><b data-stat="tiktok.views">{fmt(stats.tiktok.views)}</b><span>Visualizaciones</span></div>
+          <div class="stat"><b data-stat="tiktok.reach">{fmt(stats.tiktok.reach)}</b><span>Alcance</span></div>
+          <div class="stat"><b data-stat="tiktok.engagement">{stats.tiktok.engagement !== null ? `${stats.tiktok.engagement}%` : '—'}</b><span>Engagement</span></div>
+          <div class="stat"><b data-stat="tiktok.growth">{stats.tiktok.growth !== null ? `${stats.tiktok.growth}%` : '—'}</b><span>Crecimiento</span></div>
+          <div class="stat"><b data-stat="tiktok.posts">{fmt(stats.tiktok.posts)}</b><span>Videos</span></div>
+          <div class="stat"><b data-stat="tiktok.likes">{fmt(stats.tiktok.likes)}</b><span>Me gusta</span></div>
+        </div>
+      </div>
+
+      <p class="stats-foot">
+        Actualizado el <span data-updated>{new Date(stats.updatedAt).toLocaleString('es-ES')}</span>.
+        Los datos de esta web se leen de las APIs oficiales de cada plataforma.
+      </p>
     </div>
   </section>
 
@@ -97,8 +149,7 @@ const fmt = (value: number | null) =>
         <span class="eyebrow">Mi propuesta</span>
         <h2>Áreas en las que trabajo</h2>
         <p class="lead">
-          Todo lo que produzco nace de la experiencia propia y de una audiencia real en
-          {stats.instagram.audience ?? 'Venezuela, México y Chile'}.
+          Todo lo que produzco nace de la experiencia propia y de una audiencia real.
         </p>
       </div>
       <div class="proposal-list">
@@ -109,6 +160,19 @@ const fmt = (value: number | null) =>
           </article>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- FOTO DESTACADA -->
+  <section class="feature-photo">
+    <div class="container">
+      <img
+        src="/fotos/katha-propuesta.jpg"
+        alt="Katha en silla de ruedas, de blanco, recostada en el suelo"
+        loading="lazy"
+        width="2000"
+        height="1332"
+      />
     </div>
   </section>
 
@@ -138,7 +202,7 @@ const fmt = (value: number | null) =>
         <span class="eyebrow">Propósito</span>
         <h2>{purpose.title}</h2>
         <blockquote>“{purpose.text}”</blockquote>
-        <p style="color: var(--muted); max-width: 62ch;">{purpose.body}</p>
+        <p style="color: var(--muted);" class="purpose-body">{purpose.body}</p>
       </div>
     </div>
   </section>
@@ -151,37 +215,7 @@ const fmt = (value: number | null) =>
         <h2>Colaboraciones que dejaron huella</h2>
       </div>
       <div class="grid grid-2">
-        {collaborations.map((colab) => (
-          <article class="card colab">
-            <img src={colab.image} alt={`${colab.brand} — ${colab.campaign}`} loading="lazy" width="640" height="400" />
-            <div class="body">
-              <span class="type">{colab.type}</span>
-              <h3>{colab.brand}</h3>
-              <p style="color: var(--muted); margin: 0;">{colab.campaign}</p>
-              <p style="color: var(--muted); margin: 0;">{colab.description}</p>
-              <p class="result">Resultado: {colab.result}</p>
-              {colab.href && <a href={colab.href} target="_blank" rel="noopener">Ver proyecto ↗</a>}
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- GALERÍA -->
-  <section id="galeria">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Galería</span>
-        <h2>Imágenes para prensa y marcas</h2>
-      </div>
-      <div class="gallery">
-        {gallery.map((item) => (
-          <figure>
-            <img src={item.src} alt={item.alt} loading="lazy" width="600" height="600" />
-            <figcaption>{item.alt}</figcaption>
-          </figure>
-        ))}
+        {collaborations.map((colab) => <CollabCard colab={colab} />)}
       </div>
     </div>
   </section>
@@ -197,46 +231,198 @@ const fmt = (value: number | null) =>
           charlamos. Respondo en menos de 24 horas.
         </p>
         <div class="contact-list" style="margin-top: 1.6rem;">
-          <a href={`mailto:${profile.email}`}>
-            <span><b>Email</b>{profile.email}</span>
-          </a>
-          <a href={profile.whatsappUrl} target="_blank" rel="noopener">
-            <span><b>WhatsApp</b>{profile.whatsapp}</span>
-          </a>
-          <a href={profile.social.instagramUrl} target="_blank" rel="noopener">
-            <span><b>Instagram</b>{profile.social.instagram}</span>
-          </a>
-          <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">
-            <span><b>TikTok</b>{profile.social.tiktok}</span>
-          </a>
         </div>
       </div>
 
       <form id="contact-form" action={`mailto:${profile.email}`} method="post" enctype="text/plain">
+        <div class="form-row">
+          <label>
+            Nombre y apellido
+            <input type="text" name="nombre" required autocomplete="name" />
+          </label>
+          <label>
+            Empresa y/o marca
+            <input type="text" name="empresa" autocomplete="organization" />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Correo
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <label>
+            WhatsApp
+            <input type="tel" name="whatsapp" placeholder="+56 9 0000 0000" autocomplete="tel" />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Web
+            <input type="url" name="web" placeholder="https://" autocomplete="url" />
+          </label>
+          <label>
+            Instagram
+            <input type="text" name="instagram" placeholder="@tu_usuario" />
+          </label>
+        </div>
         <label>
-          Nombre
-          <input type="text" name="nombre" required autocomplete="name" />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" required autocomplete="email" />
-        </label>
-        <label>
-          Marca o proyecto
-          <input type="text" name="marca" autocomplete="organization" />
-        </label>
-        <label>
-          Cuéntame
+          Cuéntame tu proyecto
           <textarea name="mensaje" required></textarea>
         </label>
-        <button class="btn btn-pink" type="submit">Enviar mensaje</button>
+        <div class="form-actions">
+          <button class="btn btn-pink" type="submit">Enviar por email</button>
+          <button class="btn btn-whatsapp" type="button" id="send-whatsapp">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path
+                d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.6 0a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4s-.6-1.4-.8-1.9-.4-.6-.6-.5-.8-.5h-.7a1.4 1.4 0 0 0-1 .5 4 4 0 0 0-1.2 3 5.5 5.5 0 0 0 1.1 2.8 12.6 12.6 0 0 0 4.8 4.2c2.1.8 2.4.7 2.9.6a4.3 4.3 0 0 0 2.8-2 4.4 4.4 0 0 0 .3-2c-.1-.1-.3-.2-.5-.3Z"
+                fill="currentColor"
+              />
+            </svg>
+            Enviar por WhatsApp
+          </button>
+        </div>
         <p class="form-note" style="color: #b9a7be;">
-          Al enviar se abre tu correo con el mensaje listo para enviar.
+          El email abre tu correo con el mensaje listo para enviar; el botón de WhatsApp
+          abre el chat con los datos ya escritos.
         </p>
       </form>
     </div>
   </section>
+
+
 </Layout>
+
+<script>
+  import { track } from '@vercel/analytics';
+
+  // Tracking de conversiones en el formulario de contacto.
+  const emailButton = document.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const whatsappButton = document.querySelector<HTMLButtonElement>('#send-whatsapp');
+  emailButton?.addEventListener('click', () => track('contacto_email', { origen: 'formulario' }));
+  whatsappButton?.addEventListener('click', () => track('contacto_whatsapp', { origen: 'formulario' }));
+</script>
+
+<script>
+  // Envío por WhatsApp: lleva los datos del formulario ya escritos en el chat.
+  const whatsappButton = document.querySelector<HTMLButtonElement>('#send-whatsapp');
+  const contactForm = document.querySelector<HTMLFormElement>('#contact-form');
+  if (whatsappButton && contactForm) {
+    whatsappButton.addEventListener('click', () => {
+      const data = new FormData(contactForm);
+      const labels: Record<string, string> = {
+        nombre: 'Nombre y apellido',
+        empresa: 'Empresa y/o marca',
+        email: 'Correo',
+        whatsapp: 'WhatsApp',
+        web: 'Web',
+        instagram: 'Instagram',
+        mensaje: 'Cuéntame tu proyecto',
+      };
+      const lines = Object.entries(labels)
+        .map(([key, label]) => {
+          const value = String(data.get(key) ?? '').trim();
+          return value ? `${label}: ${value}` : '';
+        })
+        .filter(Boolean);
+      const text = encodeURIComponent(`Hola Katha, te escribo desde tu media kit.\n\n${lines.join('\n')}`);
+      window.open(`https://wa.me/56958531105?text=${text}`, '_blank', 'noopener');
+    });
+  }
+</script>
+
+<script>
+  // Videos de colaboraciones: solo uno se reproduce a la vez.
+  const pauseOthers = (current: HTMLVideoElement) => {
+    document.querySelectorAll<HTMLVideoElement>('video[data-video]').forEach((video) => {
+      if (video !== current && !video.paused) video.pause();
+    });
+  };
+
+  document.querySelectorAll<HTMLVideoElement>('video[data-video]').forEach((video) => {
+    video.addEventListener('play', () => pauseOthers(video));
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-collab]').forEach((card) => {
+    const video = card.querySelector<HTMLVideoElement>('video[data-video]');
+    if (!video) return;
+
+    video.addEventListener('error', () => {
+      const note = document.createElement('p');
+      note.className = 'video-note';
+      note.textContent = 'El video todavía no está disponible en esta web.';
+      card.querySelector('.body')?.prepend(note);
+    });
+  });
+</script>
+
+<script>
+  // Galería del hero: 3 fotos a la vez. Al rotar cambia el grupo completo de 3.
+  const gallery = document.querySelector<HTMLElement>('[data-gallery]');
+  if (gallery) {
+    const track = gallery.querySelector<HTMLElement>('[data-track]');
+    const shots = Array.from(gallery.querySelectorAll<HTMLElement>('[data-shot]'));
+    const dotsBox = gallery.querySelector<HTMLElement>('[data-dots]');
+    const visible = 3;
+    const groups = Math.ceil(shots.length / visible);
+    let group = 0;
+    let timer: number | undefined;
+
+    const columnStep = () => {
+      const first = shots[0];
+      if (!first) return 0;
+      const gap = parseFloat(getComputedStyle(track!).columnGap || '0.9') || 0.9;
+      return first.getBoundingClientRect().width + gap;
+    };
+
+    const render = () => {
+      if (track) track.style.transform = `translateX(${-group * visible * columnStep()}px)`;
+      if (!dotsBox) return;
+      dotsBox.querySelectorAll<HTMLElement>('[data-dot]').forEach((dot, i) => {
+        dot.classList.toggle('active', i === group);
+      });
+    };
+
+    const show = (next: number) => {
+      group = ((next % groups) + groups) % groups;
+      render();
+    };
+
+    const start = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (groups <= 1) return;
+      timer = window.setInterval(() => show(group + 1), 4200);
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    if (dotsBox && groups > 1) {
+      dotsBox.hidden = false;
+      for (let i = 0; i < groups; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'dot';
+        dot.dataset.dot = String(i);
+        dot.setAttribute('aria-label', `Ver fotos ${i * visible + 1}-${(i + 1) * visible}`);
+        dot.addEventListener('click', () => {
+          stop();
+          show(i);
+          start();
+        });
+        dotsBox.appendChild(dot);
+      }
+    }
+
+    show(0);
+    start();
+    window.addEventListener('resize', render);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+  }
+</script>
 
 <script>
   // Refresco automático de las estadísticas cada 5 minutos.
@@ -263,7 +449,7 @@ const fmt = (value: number | null) =>
       });
       document.querySelectorAll<HTMLElement>('[data-live]').forEach((node) => {
         const network = node.dataset.live!;
-        const live = Boolean(data?.[network]?.followers);
+        const live = Boolean(data?.total?.followers);
         node.classList.toggle('offline', !live);
         const label = node.querySelector('[data-live-label]');
         if (label) label.textContent = live ? 'En vivo' : 'Último dato';

@@ -17,12 +17,14 @@ export interface NetworkStats {
   engagement: number | null;
   growth: number | null;
   posts: number | null;
+  likes: number | null;
   audience: string | null;
 }
 
 export interface StatsPayload {
   instagram: NetworkStats;
   tiktok: NetworkStats;
+  total: NetworkStats;
   updatedAt: string;
   live: boolean;
 }
@@ -40,6 +42,7 @@ const emptyStats = (): NetworkStats => ({
   engagement: null,
   growth: null,
   posts: null,
+  likes: null,
   audience: null,
 });
 
@@ -114,6 +117,7 @@ async function fetchTiktok(): Promise<Partial<NetworkStats>> {
   if (user) {
     out.followers = numberOrNull(user.follower_count);
     out.posts = numberOrNull(user.video_count);
+    out.likes = numberOrNull(user.likes_count);
   }
 
   const videos = await getJson(
@@ -153,6 +157,56 @@ function merge(base: NetworkStats, extra: Partial<NetworkStats>): NetworkStats {
   return out;
 }
 
+export { combine };
+
+export interface FeedPost {
+  id: string;
+  permalink: string;
+  mediaUrl: string | null;
+  thumbnailUrl: string | null;
+  caption: string;
+  timestamp: string | null;
+}
+
+let feedCache: { at: number; posts: FeedPost[] } | null = null;
+
+/** Últimas publicaciones de Instagram (Graph API). */
+export async function getFeed(): Promise<FeedPost[]> {
+  const now = Date.now();
+  if (feedCache && now - feedCache.at < TTL_MS) return feedCache.posts;
+
+  const token = import.meta.env.IG_ACCESS_TOKEN;
+  const userId = import.meta.env.IG_USER_ID;
+  if (!token || !userId) {
+    feedCache = { at: now, posts: [] };
+    return [];
+  }
+
+  const url =
+    `https://graph.facebook.com/${GRAPH_VERSION}/${userId}/media` +
+    `?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp` +
+    `&limit=6&access_token=${encodeURIComponent(token)}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as { data?: Array<Record<string, unknown>> };
+    const posts = (data.data ?? []).map((p) => ({
+      id: String(p.id),
+      permalink: String(p.permalink ?? '#'),
+      mediaUrl: p.media_type === 'IMAGE' ? ((p.media_url as string) ?? null) : null,
+      thumbnailUrl: (p.thumbnail_url as string) ?? null,
+      caption: String(p.caption ?? ''),
+      timestamp: (p.timestamp as string) ?? null,
+    }));
+    feedCache = { at: now, posts };
+    return posts;
+  } catch {
+    feedCache = { at: now, posts: [] };
+    return [];
+  }
+}
+
 export async function getStats(origin: string): Promise<StatsPayload> {
   const now = Date.now();
   if (cache && now - cache.at < TTL_MS) return cache.data;
@@ -165,12 +219,16 @@ export async function getStats(origin: string): Promise<StatsPayload> {
 
   const live = Object.keys(ig).length > 0 || Object.keys(tt).length > 0;
 
+  const instagram = merge(
+    emptyStats(),
+    { ...(fallback.instagram ?? {}), ...ig, audience: (fallback.instagram?.audience) ?? 'Venezuela · México · Chile' },
+  );
+  const tiktok = merge(emptyStats(), { ...(fallback.tiktok ?? {}), ...tt });
+
   const data: StatsPayload = {
-    instagram: merge(
-      emptyStats(),
-      { ...(fallback.instagram ?? {}), ...ig, audience: (fallback.instagram?.audience) ?? 'Venezuela · México · Chile' },
-    ),
-    tiktok: merge(emptyStats(), { ...(fallback.tiktok ?? {}), ...tt }),
+    instagram,
+    tiktok,
+    total: combine(instagram, tiktok),
     updatedAt: new Date().toISOString(),
     live,
   };

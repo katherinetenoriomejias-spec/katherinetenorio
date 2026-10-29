@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { Analytics } from '@vercel/analytics/astro';
 import { profile } from '../content/kit';
 
 interface Props {
@@ -33,13 +34,34 @@ const {
   <body>
     <header class="site-header">
       <div class="container inner">
-        <a class="brand" href="#top">{profile.name.split(' ')[0]}<span>.</span></a>
+        <a class="brand" href="#top" aria-label="Volver al inicio">
+          <svg class="brand-mark" viewBox="0 0 56 40" width="52" height="36" aria-hidden="true">
+            <text
+              x="15"
+              y="32"
+              text-anchor="middle"
+              font-family="Cormorant Garamond, Georgia, serif"
+              font-size="34"
+              font-weight="600"
+              font-style="italic"
+              fill="#ff3d9a">K</text>
+            <text
+              x="41"
+              y="32"
+              text-anchor="middle"
+              font-family="Cormorant Garamond, Georgia, serif"
+              font-size="34"
+              font-weight="600"
+              font-style="italic"
+              fill="#16131a">T</text>
+            <line x1="28" y1="4" x2="28" y2="36" stroke="#ff3d9a" stroke-width="1.2" opacity="0.5" />
+          </svg>
+        </a>
         <nav class="nav-links" aria-label="Secciones del media kit">
           <a href="#stats">Estadísticas</a>
           <a href="#propuesta">Propuesta</a>
           <a href="#servicios">Servicios</a>
           <a href="#colaboraciones">Colaboraciones</a>
-          <a href="#galeria">Galería</a>
           <a href="#contacto">Contacto</a>
         </nav>
         <a class="btn btn-pink" href="#contacto">Trabajemos juntos</a>
@@ -60,5 +82,7 @@ const {
         </div>
       </div>
     </footer>
+    <Analytics />
+
   </body>
 </html>
