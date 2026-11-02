@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
-    "@vercel/blob": "^2.8.2"
+    "@vercel/blob": "^2.8.2",
+    "astro": "5.18.2"
   }
 }

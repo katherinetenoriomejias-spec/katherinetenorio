@@ -1,0 +1,148 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { profile } from '../content/kit';
+---
+
+<Layout
+  title={`Política de privacidad — ${profile.name}`}
+  description={`Política de privacidad y tratamiento de datos del sitio web de ${profile.name}.`}
+>
+  <article class="legal">
+    <div class="container">
+      <span class="eyebrow">Legal</span>
+      <h1>Política de privacidad</h1>
+      <p class="legal-meta">Última actualización: 28 de octubre de 2026</p>
+
+      <h2>1. Quién soy</h2>
+      <p>
+        Este sitio web (<strong>katha-media-kit.vercel.app</strong>) es propiedad y está
+        operado por <strong>{profile.name}</strong>, creadora digital con base en
+        {profile.location}. Contacto: <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+      </p>
+
+      <h2>2. Qué datos se recogen</h2>
+      <p>
+        Este sitio recoge la mínima cantidad de datos necesaria para su funcionamiento:
+      </p>
+      <ul>
+        <li>
+          <strong>Formulario de contacto:</strong> nombre, empresa, correo, WhatsApp, web,
+          Instagram y el mensaje que escribas. El formulario se envía por correo electrónico
+          a {profile.email} (no se almacena en ninguna base de datos).
+        </li>
+        <li>
+          <strong>Analítica web (Vercel Analytics):</strong> visitas, páginas vistas,
+          referrer, dispositivo, navegador y país. Es una analítica sin cookies y no
+          identifica a las personas individualmente.
+        </li>
+        <li>
+          <strong>Datos de redes sociales:</strong> las cifras de seguidores, alcance e
+          impresiones se leen de las APIs oficiales de Instagram y TikTok. No se recoge
+          información personal de los visitantes desde esas plataformas.
+        </li>
+      </ul>
+
+      <h2>3. Cookies</h2>
+      <p>
+        Este sitio **no usa cookies**. Vercel Analytics funciona sin cookies, por lo que no
+        se requiere un banner de consentimiento. La única información que se guarda en tu
+        navegador son preferencias locales (por ejemplo, el estado del carrusel de fotos),
+        y se borran al cerrar la pestaña.
+      </p>
+
+      <h2>4. Servicios de terceros</h2>
+      <p>Para funcionar, el Sitio usa los siguientes servicios:</p>
+      <ul>
+        <li><strong>Vercel</strong> — hosting y funciones serverless (política de privacidad: vercel.com/legal/privacy-policy)</li>
+        <li><strong>Google Fonts</strong> — tipografías (política: policies.google.com/privacy)</li>
+        <li><strong>Instagram (Meta) y TikTok</strong> — lectura de estadísticas y feed (solo se leen mis propios datos, no los del visitante)</li>
+      </ul>
+
+      <h2>5. Para qué se usan los datos</h2>
+      <p>
+        Los datos del formulario se usan exclusivamente para responder a tu consulta y
+        gestionar la colaboración. Las analíticas se usan para entender qué secciones
+        funcionan mejor y mejorar la web. No se venden ni se comparten con terceros para
+        fines comerciales.
+      </p>
+
+      <h2>6. Conservación de los datos</h2>
+      <p>
+        Los mensajes del formulario llegan a mi correo y se conservan el tiempo que sea
+        necesario para responder y gestionar la colaboración. Las analíticas se conservan
+        según la política de Vercel (máximo 12 meses).
+      </p>
+
+      <h2>7. Tus derechos</h2>
+      <p>
+        Si eres residente de la Unión Europea (RGPD) o de Chile (Ley 19.628), tienes
+        derecho a:
+      </p>
+      <ul>
+        <li>Acceder a los datos que tengo sobre ti</li>
+        <li>Rectificarlos o eliminarlos</li>
+        <li>Oponerte a su tratamiento</li>
+        <li>Portabilidad de los datos</li>
+      </ul>
+      <p>
+        Para ejercerlos, escríbeme a
+        <a href={`mailto:${profile.email}`}>{profile.email}</a> y respondo en menos de 30 días.
+      </p>
+
+      <h2>8. Menores de edad</h2>
+      <p>
+        El Sitio no está dirigido a menores de 14 años y no se recogen datos de menores
+        de forma intencional. Si detectas que un menor me ha enviado datos, avísame y los
+        elimino.
+      </p>
+
+      <h2>9. Cambios en esta política</h2>
+      <p>
+        Puedo actualizar esta política en cualquier momento. La versión vigente siempre
+        está disponible en esta página, con la fecha de última actualización arriba.
+      </p>
+
+      <h2>10. Contacto</h2>
+      <p>
+        Para cualquier consulta sobre privacidad o protección de datos, escríbeme a
+        <a href={`mailto:${profile.email}`}>{profile.email}</a> o por WhatsApp al
+        {profile.whatsapp}.
+      </p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .legal {
+    padding: 4rem 0 5rem;
+  }
+  .legal h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .legal-meta {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 2.5rem;
+  }
+  .legal h2 {
+    font-size: 1.2rem;
+    margin: 2rem 0 0.6rem;
+    color: var(--ink);
+  }
+  .legal p, .legal li {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .legal ul {
+    padding-left: 1.4rem;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .legal a { color: var(--pink); text-decoration: none; }
+  .legal a:hover { text-decoration: underline; }
+  .legal strong { color: var(--ink); font-weight: 600; }
+</style>

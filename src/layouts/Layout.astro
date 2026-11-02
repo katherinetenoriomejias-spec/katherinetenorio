@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import { Analytics } from '@vercel/analytics/astro';
 import { profile } from '../content/kit';
 
 interface Props {
@@ -79,10 +78,11 @@ const {
           <a href={profile.social.instagramUrl} target="_blank" rel="noopener">{profile.social.instagram}</a>
           <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">{profile.social.tiktok}</a>
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a href="/terms">Términos</a>
+          <a href="/privacy">Privacidad</a>
         </div>
       </div>
     </footer>
-    <Analytics />
-
+    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>

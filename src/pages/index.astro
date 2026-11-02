@@ -2,12 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import CollabCard from '../components/CollabCard.astro';
 import { profile, proposal, services, collaborations, packages, purpose } from '../content/kit';
-import { getStats } from '../lib/stats';
-
-const stats = await getStats(Astro.url.origin);
 
 const fmt = (value: number | null) =>
   value === null ? '—' : new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+
+// Default empty stats for static build. Client-side JS fetches live data and updates the page.
+const stats = {
+  instagram: { followers: null, reach: null, impressions: null, views: null, engagement: null, growth: null, posts: null, likes: null, audience: null },
+  tiktok: { followers: null, reach: null, impressions: null, views: null, engagement: null, growth: null, posts: null, likes: null, audience: null },
+  updatedAt: new Date().toISOString(),
+  live: false,
+};
 ---
 
 <Layout>
@@ -74,17 +79,6 @@ const fmt = (value: number | null) =>
         <h2>Estadísticas reales, siempre actualizadas</h2>
         <p class="lead stats-lead">
           Las cifras se leen directamente de Instagram y TikTok. Se refrescan solas mientras estás en la página.
-        </p>
-      </div>
-
-      <div class="social-box social-box-total" data-stats>
-        <div class="stats-head">
-          <h3>Total redes sociales</h3>
-          <span class="live-dot" data-live="total"><i></i><span data-live-label>En vivo</span></span>
-        </div>
-        <p class="stats-hero">
-          <b data-stat="total.followers">{fmt(stats.total.followers)}</b>
-          <span>Instagram + TikTok</span>
         </p>
       </div>
 

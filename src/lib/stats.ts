@@ -24,7 +24,6 @@ export interface NetworkStats {
 export interface StatsPayload {
   instagram: NetworkStats;
   tiktok: NetworkStats;
-  total: NetworkStats;
   updatedAt: string;
   live: boolean;
 }
@@ -157,7 +156,6 @@ function merge(base: NetworkStats, extra: Partial<NetworkStats>): NetworkStats {
   return out;
 }
 
-export { combine };
 
 export interface FeedPost {
   id: string;
@@ -228,7 +226,6 @@ export async function getStats(origin: string): Promise<StatsPayload> {
   const data: StatsPayload = {
     instagram,
     tiktok,
-    total: combine(instagram, tiktok),
     updatedAt: new Date().toISOString(),
     live,
   };

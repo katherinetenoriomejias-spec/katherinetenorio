@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { profile } from '../content/kit';
+---
+
+<Layout
+  title={`Términos y condiciones — ${profile.name}`}
+  description={`Términos y condiciones de uso del sitio web de ${profile.name}.`}
+>
+  <article class="legal">
+    <div class="container">
+      <span class="eyebrow">Legal</span>
+      <h1>Términos y condiciones</h1>
+      <p class="legal-meta">Última actualización: 28 de octubre de 2026</p>
+
+      <h2>1. Aceptación de los términos</h2>
+      <p>
+        Al acceder y usar este sitio web (<strong>katha-media-kit.vercel.app</strong> y sus
+        subdominios, en adelante “el Sitio”), aceptas estos Términos y condiciones en su
+        totalidad. Si no estás de acuerdo con alguna parte, te pedimos que no uses el Sitio.
+      </p>
+
+      <h2>2. Quién soy</h2>
+      <p>
+        El Sitio es propiedad y está operado por <strong>{profile.name}</strong>, creadora
+        digital especializada en accesibilidad, inclusión y movilidad, con base en
+        {profile.location}. Contacto: <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+      </p>
+
+      <h2>3. Contenido del Sitio</h2>
+      <p>
+        El contenido (textos, imágenes, videos, fotografías y material audiovisual) se
+        publica con fines informativos y profesionales: presentar mi trabajo, mis
+        estadísticas de redes y mis propuestas de colaboración con marcas.
+      </p>
+      <p>
+        Las métricas mostradas (seguidores, alcance, visualizaciones, engagement) se leen
+        directamente de las APIs oficiales de Instagram y TikTok cuando están disponibles,
+        y se actualizan automáticamente. Pueden presentar variaciones por cambios de la
+        plataforma o por latencias de caché.
+      </p>
+
+      <h2>4. Propiedad intelectual</h2>
+      <p>
+        Todo el contenido del Sitio (fotografías, videos, textos, diseño y código) es
+        propiedad de {profile.name} o se usa con autorización. No se puede copiar,
+        reproducir, distribuir, modificar ni usar con fines comerciales sin autorización
+        escrita previa.
+      </p>
+      <p>
+        Las marcas, logotipos y nombres de terceros que aparecen en las colaboraciones
+        (Moving Life México, Reskin.CL, Nestlé, entre otras) son propiedad de sus
+        respectivos dueños.
+      </p>
+
+      <h2>5. Uso permitido</h2>
+      <p>Te comprometes a usar el Sitio únicamente para:</p>
+      <ul>
+        <li>Informarte sobre mi trabajo y propuestas profesionales</li>
+        <li>Contactarme para colaboraciones, campañas o conferencias</li>
+        <li>Consultar mis estadísticas y material de prensa</li>
+      </ul>
+      <p>Queda prohibido:</p>
+      <ul>
+        <li>Intentar vulnerar la seguridad del Sitio o de sus servicios</li>
+        <li>Extraer datos de forma automatizada (scraping) para uso comercial</li>
+        <li>Usar el contenido para fines difamatorios, engañosos o ilegales</li>
+        <li>Suplantar mi identidad o la de mi marca</li>
+      </ul>
+
+      <h2>6. Colaboraciones y propuestas</h2>
+      <p>
+        Las propuestas de colaboración, tarifas y planes mostrados en el Sitio son
+        referenciales y se ajustan a cada proyecto. Cualquier acuerdo comercial se formaliza
+        por separado, por escrito, antes de iniciar el trabajo.
+      </p>
+      <p>
+        El uso de mi imagen se otorga por un máximo de 1 año, sin firma de exclusividad,
+        salvo que se acuerde lo contrario por escrito.
+      </p>
+
+      <h2>7. Formulario de contacto</h2>
+      <p>
+        El formulario de contacto envía los datos por correo electrónico a
+        {profile.email}. Al enviarlo aceptas que los datos proporcionados se usen
+        exclusivamente para responder a tu consulta y gestionar la colaboración.
+      </p>
+
+      <h2>8. Enlaces a terceros</h2>
+      <p>
+        El Sitio contiene enlaces a plataformas externas (Instagram, TikTok, WhatsApp).
+        No soy responsable del contenido, las políticas ni las prácticas de esos sitios.
+        Acceder a ellos queda bajo tu propia responsabilidad.
+      </p>
+
+      <h2>9. Limitación de responsabilidad</h2>
+      <p>
+        El Sitio se proporciona “tal cual”, sin garantías de disponibilidad continua ni de
+        ausencia de errores. No seré responsable por daños directos, indirectos o
+        consecuentes derivados del uso o la imposibilidad de uso del Sitio, incluyendo
+        pérdida de datos o interrupciones de servicio.
+      </p>
+
+      <h2>10. Modificaciones</h2>
+      <p>
+        Puedo actualizar estos términos en cualquier momento. La versión vigente siempre
+        está disponible en esta página, con la fecha de última actualización arriba.
+        El uso continuado del Sitio después de una modificación implica la aceptación de
+        los nuevos términos.
+      </p>
+
+      <h2>11. Ley aplicable</h2>
+      <p>
+        Estos términos se rigen por las leyes de Chile. Cualquier disputa se someterá a
+        los tribunales competentes de Santiago de Chile.
+      </p>
+
+      <h2>12. Contacto</h2>
+      <p>
+        Si tienes dudas sobre estos términos, escríbeme a
+        <a href={`mailto:${profile.email}`}>{profile.email}</a> o por WhatsApp al
+        {profile.whatsapp}.
+      </p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .legal {
+    padding: 4rem 0 5rem;
+  }
+  .legal h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .legal-meta {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 2.5rem;
+  }
+  .legal h2 {
+    font-size: 1.2rem;
+    margin: 2rem 0 0.6rem;
+    color: var(--ink);
+  }
+  .legal p, .legal li {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .legal ul {
+    padding-left: 1.4rem;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .legal a { color: var(--pink); text-decoration: none; }
+  .legal a:hover { text-decoration: underline; }
+</style>
