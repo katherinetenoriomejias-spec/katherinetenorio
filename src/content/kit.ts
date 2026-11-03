@@ -15,7 +15,7 @@ export const profile = {
   name: 'Katha Tenorio',
   role: 'Creadora digital · Accesibilidad, inclusión y movilidad',
   tagline:
-    'Convierto experiencias reales en historias que conectan. Contenido sobre accesibilidad, inclusión, movilidad, lifestyle y viajes desde la mirada de una persona que usa silla de ruedas.',
+    'Convierto experiencias reales en historias que conectan desde las vivencias de una mujer usuaria de silla de ruedas, dándole enfoque a la importancia de la inclusión.',
   location: 'Las Condes · Santiago de Chile',
   languages: ['Español'],
   email: 'kathatrabajos@gmail.com',
