@@ -1,21 +1,24 @@
 {
   "instagram": {
-    "followers": 99400,
+    "followers": 98870,
     "posts": 585,
     "reach": null,
     "impressions": null,
     "views": null,
     "engagement": null,
     "growth": null,
-    "audience": "Venezuela · México · Chile"
+    "audience": "México · Venezuela · Estados Unidos · Chile · Colombia"
   },
   "tiktok": {
-    "followers": null,
+    "followers": 69200,
+    "posts": null,
+    "reach": null,
+    "impressions": null,
     "views": null,
     "engagement": null,
     "growth": null,
-    "posts": null,
-    "audience": "Venezuela · México · Chile"
+    "likes": 1500000,
+    "audience": "Chile · México · Venezuela · Colombia · Ecuador"
   },
-  "updatedAt": "2026-10-04T00:00:00.000Z"
+  "updatedAt": "2026-11-03T00:00:00.000Z"
 }

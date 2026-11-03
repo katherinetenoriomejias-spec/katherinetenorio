@@ -1,16 +1,24 @@
 ---
+import { readFileSync } from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import CollabCard from '../components/CollabCard.astro';
-import { profile, proposal, services, collaborations, packages, purpose, asset, thumbOf } from '../content/kit';
+import { profile, proposal, services, collaborations, packages, purpose, gallery, instagramShots, tiktokShots, asset, thumbOf } from '../content/kit';
 
-const fmt = (value: number | null) =>
-  value === null ? '—' : new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+const num = (value: number | null) =>
+  value === null ? '—' : new Intl.NumberFormat('es-ES').format(value);
 
-// Default empty stats for static build. Client-side JS fetches live data and updates the page.
+// Cifras incrustadas en el HTML y refrescadas después desde public/data/social.json.
+const socialData = JSON.parse(
+  readFileSync(new URL('../../public/data/social.json', import.meta.url), 'utf8'),
+);
+const emptyNetwork = {
+  followers: null, reach: null, impressions: null, views: null,
+  engagement: null, growth: null, posts: null, likes: null, audience: null,
+};
 const stats = {
-  instagram: { followers: null, reach: null, impressions: null, views: null, engagement: null, growth: null, posts: null, likes: null, audience: null },
-  tiktok: { followers: null, reach: null, impressions: null, views: null, engagement: null, growth: null, posts: null, likes: null, audience: null },
-  updatedAt: new Date().toISOString(),
+  instagram: { ...emptyNetwork, ...socialData.instagram },
+  tiktok: { ...emptyNetwork, ...socialData.tiktok },
+  updatedAt: socialData.updatedAt,
   live: false,
 };
 ---
@@ -84,9 +92,9 @@ const stats = {
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">En números</span>
-        <h2>Estadísticas reales, siempre actualizadas</h2>
+        <h2>Estadísticas reales</h2>
         <p class="lead stats-lead">
-          Las cifras se leen directamente de Instagram y TikTok. Se refrescan solas mientras estás en la página.
+          Cifras oficiales de Instagram y TikTok al 3 de noviembre: seguidores, publicaciones y desempeño del contenido.
         </p>
       </div>
 
@@ -100,16 +108,45 @@ const stats = {
             </svg>
             Instagram
           </h3>
-          <span class="live-dot" data-live="instagram"><i></i><span data-live-label>En vivo</span></span>
+          <span class="stats-date">Al 3 de noviembre</span>
         </div>
-        <div class="stat-grid">
-          <div class="stat"><b data-stat="instagram.followers">{fmt(stats.instagram.followers)}</b><span>Seguidores</span></div>
-          <div class="stat"><b data-stat="instagram.reach">{fmt(stats.instagram.reach)}</b><span>Alcance</span></div>
-          <div class="stat"><b data-stat="instagram.impressions">{fmt(stats.instagram.impressions)}</b><span>Impresiones</span></div>
-          <div class="stat"><b data-stat="instagram.views">{fmt(stats.instagram.views)}</b><span>Visualizaciones</span></div>
-          <div class="stat"><b data-stat="instagram.engagement">{stats.instagram.engagement !== null ? `${stats.instagram.engagement}%` : '—'}</b><span>Engagement</span></div>
-          <div class="stat"><b data-stat="instagram.growth">{stats.instagram.growth !== null ? `${stats.instagram.growth}%` : '—'}</b><span>Crecimiento</span></div>
-          <div class="stat"><b data-stat="instagram.posts">{fmt(stats.instagram.posts)}</b><span>Publicaciones</span></div>
+        <div class="stat-grid stat-grid-pair">
+          <div class="stat"><b data-stat="instagram.followers">{num(stats.instagram.followers)}</b><span>Seguidores</span></div>
+          <div class="stat"><b data-stat="instagram.posts">{num(stats.instagram.posts)}</b><span>Publicaciones</span></div>
+        </div>
+
+        <div
+          class="stats-carousel"
+          data-carousel
+          role="region"
+          aria-roledescription="carrusel"
+          aria-label="Capturas de las estadísticas de Instagram"
+        >
+          <div class="carousel-viewport" data-carousel-viewport>
+            <div class="carousel-track">
+              {instagramShots.map((shot, index) => (
+                <figure class="carousel-slide" data-carousel-slide>
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    width="760"
+                    height="1450"
+                  />
+                  <figcaption>
+                    <strong>{shot.title}</strong>
+                    <span>{shot.caption}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+          <div class="carousel-controls">
+            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Captura anterior">←</button>
+            <div class="carousel-dots" data-carousel-dots></div>
+            <button type="button" class="carousel-btn" data-carousel-next aria-label="Captura siguiente">→</button>
+          </div>
         </div>
       </div>
 
@@ -124,28 +161,96 @@ const stats = {
             </svg>
             TikTok
           </h3>
-          <span class="live-dot" data-live="tiktok"><i></i><span data-live-label>En vivo</span></span>
+          <span class="stats-date">Al 3 de noviembre</span>
         </div>
-        <div class="stat-grid">
-          <div class="stat"><b data-stat="tiktok.followers">{fmt(stats.tiktok.followers)}</b><span>Seguidores</span></div>
-          <div class="stat"><b data-stat="tiktok.views">{fmt(stats.tiktok.views)}</b><span>Visualizaciones</span></div>
-          <div class="stat"><b data-stat="tiktok.reach">{fmt(stats.tiktok.reach)}</b><span>Alcance</span></div>
-          <div class="stat"><b data-stat="tiktok.engagement">{stats.tiktok.engagement !== null ? `${stats.tiktok.engagement}%` : '—'}</b><span>Engagement</span></div>
-          <div class="stat"><b data-stat="tiktok.growth">{stats.tiktok.growth !== null ? `${stats.tiktok.growth}%` : '—'}</b><span>Crecimiento</span></div>
-          <div class="stat"><b data-stat="tiktok.posts">{fmt(stats.tiktok.posts)}</b><span>Videos</span></div>
-          <div class="stat"><b data-stat="tiktok.likes">{fmt(stats.tiktok.likes)}</b><span>Me gusta</span></div>
+        <div class="stat-grid stat-grid-pair">
+          <div class="stat"><b data-stat="tiktok.followers">{num(stats.tiktok.followers)}</b><span>Seguidores</span></div>
+          <div class="stat"><b data-stat="tiktok.likes">{num(stats.tiktok.likes)}</b><span>Me gusta</span></div>
+        </div>
+
+        <div
+          class="stats-carousel"
+          data-carousel
+          role="region"
+          aria-roledescription="carrusel"
+          aria-label="Capturas de las estadísticas de TikTok"
+        >
+          <div class="carousel-viewport" data-carousel-viewport>
+            <div class="carousel-track">
+              {tiktokShots.map((shot, index) => (
+                <figure class="carousel-slide" data-carousel-slide>
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    width="760"
+                    height="1450"
+                  />
+                  <figcaption>
+                    <strong>{shot.title}</strong>
+                    <span>{shot.caption}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+          <div class="carousel-controls">
+            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Captura anterior">←</button>
+            <div class="carousel-dots" data-carousel-dots></div>
+            <button type="button" class="carousel-btn" data-carousel-next aria-label="Captura siguiente">→</button>
+          </div>
         </div>
       </div>
 
       <p class="stats-foot">
-        Actualizado el <span data-updated>{new Date(stats.updatedAt).toLocaleString('es-ES')}</span>.
-        Los datos de esta web se leen de las APIs oficiales de cada plataforma.
+        Cifras oficiales de Instagram y TikTok al 3 de noviembre de 2026.
       </p>
     </div>
   </section>
 
-  <!-- PROPUESTA -->
-  <section id="propuesta" style="background: var(--paper-2);">
+  <!-- PROPÓSITO -->
+  <section id="proposito">
+    <div class="container">
+      <div class="purpose">
+        <span class="eyebrow">Propósito</span>
+        <h2>{purpose.title}</h2>
+        <blockquote>“{purpose.text}”</blockquote>
+        <p style="color: var(--muted);" class="purpose-body">{purpose.body}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOTO DESTACADA -->
+  <section class="feature-photo">
+    <div class="container">
+      <img
+        src={asset('/fotos/katha-propuesta.jpg')}
+        alt="Katha en silla de ruedas, de blanco, recostada en el suelo"
+        loading="lazy"
+        decoding="async"
+        width="1600"
+        height="1066"
+      />
+    </div>
+  </section>
+
+  <!-- PROYECTOS DESTACADOS -->
+  <section id="proyectos" style="background: var(--paper-2);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Proyectos destacados</span>
+        <h2>Imagen de inclusión laboral para Nestlé México</h2>
+      </div>
+
+      <div class="grid grid-2">
+        {collaborations.map((colab) => <CollabCard colab={colab} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- MI PROPUESTA -->
+  <section id="propuesta">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Mi propuesta</span>
@@ -165,41 +270,32 @@ const stats = {
     </div>
   </section>
 
-  <!-- FOTO DESTACADA -->
-  <section class="feature-photo">
-    <div class="container">
-      <img
-        src={asset('/fotos/katha-propuesta.jpg')}
-        alt="Katha en silla de ruedas, de blanco, recostada en el suelo"
-        loading="lazy"
-        decoding="async"
-        width="1600"
-        height="1066"
-      />
-    </div>
-  </section>
-
-  <!-- PROPÓSITO -->
-  <section id="proposito">
-    <div class="container">
-      <div class="purpose">
-        <span class="eyebrow">Propósito</span>
-        <h2>{purpose.title}</h2>
-        <blockquote>“{purpose.text}”</blockquote>
-        <p style="color: var(--muted);" class="purpose-body">{purpose.body}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- COLABORACIONES -->
-  <section id="colaboraciones" style="background: var(--paper-2);">
+  <!-- COLLAGE DE FOTOS -->
+  <section id="galeria" style="background: var(--paper-2);">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Colaboraciones</span>
-        <h2>Colaboraciones que dejaron huella</h2>
+        <span class="eyebrow">Galería</span>
+        <h2>Momentos que cuentan historias</h2>
       </div>
-      <div class="grid grid-2">
-        {collaborations.map((colab) => <CollabCard colab={colab} />)}
+      <div class="photo-collage">
+        {gallery.map((photo, index) => (
+          <figure
+            class={`collage-item item-${index + 1}`}
+            data-full={photo.src}
+            role="button"
+            tabindex="0"
+            aria-label={`Ampliar foto: ${photo.alt}`}
+          >
+            <img
+              src={thumbOf(photo.src)}
+              alt={photo.alt}
+              loading="lazy"
+              decoding="async"
+              width="520"
+              height="520"
+            />
+          </figure>
+        ))}
       </div>
     </div>
   </section>
@@ -445,11 +541,16 @@ const stats = {
         const [network, metric] = key.split('.');
         const value = data?.[network]?.[metric];
         if (value === null || value === undefined) {
-          node.textContent = metric === 'engagement' || metric === 'growth' ? '—' : '—';
+          node.textContent = '—';
           return;
         }
+        const full = metric === 'followers' || metric === 'posts' || metric === 'likes';
         node.textContent =
-          metric === 'engagement' || metric === 'growth' ? `${value}%` : compact(value);
+          metric === 'engagement' || metric === 'growth'
+            ? `${value}%`
+            : full
+              ? new Intl.NumberFormat('es-ES').format(value)
+              : compact(value);
       });
       document.querySelectorAll<HTMLElement>('[data-live]').forEach((node) => {
         const network = node.dataset.live!;
@@ -512,5 +613,51 @@ const stats = {
   closeBtn?.addEventListener('click', closeLightbox);
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && box && !box.hidden) closeLightbox();
+  });
+</script>
+
+<script>
+  // Carrusel de capturas: deslizamiento nativo con flechas y puntos.
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+    const viewport = carousel.querySelector<HTMLElement>('[data-carousel-viewport]');
+    const track = carousel.querySelector<HTMLElement>('.carousel-track');
+    const slides = Array.from(carousel.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
+    const prev = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+    const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]');
+    const dotsBox = carousel.querySelector<HTMLElement>('[data-carousel-dots]');
+    if (!viewport || !track || slides.length === 0) return;
+
+    const gap = () => parseFloat(getComputedStyle(track).columnGap || '0') || 0;
+    const step = () => slides[0].offsetWidth + gap();
+
+    const dots = slides.map((_, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'dot';
+      dot.setAttribute('aria-label', `Ver captura ${index + 1} de ${slides.length}`);
+      dot.addEventListener('click', () => {
+        const left = slides[index].offsetLeft - slides[0].offsetLeft;
+        viewport.scrollTo({ left, behavior: 'smooth' });
+      });
+      dotsBox?.appendChild(dot);
+      return dot;
+    });
+
+    const go = (direction: number) => viewport.scrollBy({ left: direction * step(), behavior: 'smooth' });
+    prev?.addEventListener('click', () => go(-1));
+    next?.addEventListener('click', () => go(1));
+
+    const update = () => {
+      const max = viewport.scrollWidth - viewport.clientWidth;
+      const index = Math.round(viewport.scrollLeft / step());
+      const active = Math.max(0, Math.min(index, dots.length - 1));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === active));
+      if (prev) prev.disabled = viewport.scrollLeft <= 2;
+      if (next) next.disabled = viewport.scrollLeft >= max - 2;
+    };
+
+    viewport.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   });
 </script>

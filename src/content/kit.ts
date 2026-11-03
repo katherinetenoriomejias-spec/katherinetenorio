@@ -103,6 +103,31 @@ export const services = [
   },
 ];
 
+export interface Project {
+  title: string;
+  text: string;
+}
+
+/** Proyectos desarrollados con Nestlé México entre 2022 y 2024. */
+export const projects2022: Project[] = [
+  {
+    title: 'Unidos por el propósito',
+    text: 'Creando oportunidades, cultura del trabajo sin obstáculos y desarrollo de habilidades para un futuro joven digital.',
+  },
+  {
+    title: 'Jóvenes construyendo el futuro',
+    text: 'Conferencias nacionales y concientización con el equipo Nestlé sobre la importancia de la inclusión laboral.',
+  },
+  {
+    title: 'B2B Exponencial',
+    text: 'Conferencias nacionales y grabación de contenido audiovisual.',
+  },
+  {
+    title: 'Alianza del Pacífico',
+    text: 'Conferencia nacional, rueda de prensa y entrevistas sobre la importancia de la inclusión laboral.',
+  },
+];
+
 export interface Collaboration {
   brand: string;
   campaign: string;
@@ -111,6 +136,18 @@ export interface Collaboration {
   result: string;
   image: string;
   href: string;
+  /** Proyectos o hitos que se listan dentro de la tarjeta. */
+  projects?: Project[];
+  /** Fotos que acompañan al video en un carrusel dentro de la tarjeta. */
+  photos?: StatShot[];
+  /** Oculta el rótulo superior (p. ej. "Ponente"). */
+  hideType?: boolean;
+  /** Oculta la línea de campaña / contexto. */
+  hideCampaign?: boolean;
+  /** Oculta el título de la tarjeta (cuando la sección ya lo muestra). */
+  hideTitle?: boolean;
+  /** Pinta la descripción de la tarjeta en fucsia. */
+  descriptionAccent?: boolean;
   /** Video reproducible al hacer clic (MP4 propio o embed de la red). */
   video?: {
     /** Archivo local en public/videos/ */
@@ -185,18 +222,58 @@ export const packages: MediaPackage[] = [
   },
 ];
 
+/** Fotos de los proyectos de inclusión laboral con Nestlé México. */
+export const nestlePhotos: StatShot[] = [
+  {
+    src: asset('/fotos/nestle/nestle-1.jpg'),
+    title: 'Ecosistema allinN',
+    caption: 'Presentación del ecosistema de innovación de Nestlé México.',
+    alt: 'Escenario del evento allinN de Nestlé México con pantallas que muestran el ecosistema de innovación',
+  },
+  {
+    src: asset('/fotos/nestle/nestle-2.jpg'),
+    title: 'Ponencia',
+    caption: 'Conferencia sobre inclusión laboral frente al equipo de Nestlé.',
+    alt: 'Katha Tenorio en silla de ruedas durante su ponencia en el evento de Nestlé México',
+  },
+  {
+    src: asset('/fotos/nestle/nestle-3.jpg'),
+    title: 'Reconocimiento',
+    caption: 'Reconocimiento al mejor proyecto de inclusión laboral a nivel internacional para Nestlé México.',
+    alt: 'Equipo de Nestlé México junto a Katha Tenorio sosteniendo el reconocimiento al mejor proyecto de inclusión laboral a nivel internacional',
+  },
+  {
+    src: asset('/fotos/nestle/nestle-4.jpg'),
+    title: 'Oficinas Nestlé',
+    caption: 'Grabación de contenido audiovisual dentro de las instalaciones de Nestlé México.',
+    alt: 'Katha Tenorio con el equipo de Nestlé México dentro de las instalaciones de la empresa',
+  },
+  {
+    src: asset('/fotos/nestle/nestle-5.jpg'),
+    title: 'Alianza del Pacífico',
+    caption: 'Colombia, México y Chile unidos por la inclusión laboral.',
+    alt: 'Katha Tenorio y el equipo con las banderas de Colombia, México y Chile en la Alianza del Pacífico',
+  },
+];
+
 export const collaborations: Collaboration[] = [
   {
-    brand: 'Conferencia',
+    brand: 'Imagen de inclusión laboral para Nestlé México',
     campaign: 'Alianza del Pacífico · Nestlé México',
     type: 'Ponente',
     description:
-      'Frente a más de 300 personas de forma presencial y cámaras de TV nacional para diferentes países del Pacífico, expuse el proyecto de inclusión que tendría Nestlé México. Asimismo, rueda de prensa para dar respuestas a dudas sobre el proyecto del que yo era imagen de inclusión.',
+      'Proyectos de inclusión laboral desarrollados con Nestlé México entre 2022 y 2024.',
+    projects: projects2022,
+    photos: nestlePhotos,
+    hideType: true,
+    hideCampaign: true,
+    hideTitle: true,
+    descriptionAccent: true,
     result: '',
-    image: asset('/fotos/colab-sexta.jpg'),
+    image: asset('/fotos/nestle-poster.jpg'),
     href: '',
     video: {
-      src: asset('/videos/sexta.mp4'),
+      src: asset('/videos/nestle-inclusion.mp4'),
       url: 'https://www.instagram.com/reel/Cj9F5kYjQkF/?utm_source=ig_web_copy_link&psln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -281,6 +358,93 @@ export const gallery = [
   { src: asset('/fotos/galeria-4.jpg'), alt: 'Detalle de la silla de ruedas' },
   { src: asset('/fotos/galeria-5.jpg'), alt: 'Sesión de fotos para una campaña' },
   { src: asset('/fotos/galeria-6.jpg'), alt: 'Presentación de una experiencia accesible' },
+];
+
+export interface StatShot {
+  src: string;
+  title: string;
+  caption: string;
+  alt: string;
+}
+
+/** Capturas de las estadísticas de Instagram, en orden narrativo. */
+export const instagramShots: StatShot[] = [
+  {
+    src: asset('/fotos/instagram/perfil.jpg'),
+    title: 'Perfil',
+    caption: '98,8 mil seguidores · 585 publicaciones · 866 seguidos.',
+    alt: 'Perfil de Instagram de Katha Tenorio con 98,8 mil seguidores y 585 publicaciones',
+  },
+  {
+    src: asset('/fotos/instagram/seguidores.jpg'),
+    title: 'Seguidores',
+    caption: '98.870 seguidores y una variación de −0,3% en los últimos 30 días.',
+    alt: 'Estadísticas de seguidores de Instagram: 98.870 seguidores en los últimos 30 días',
+  },
+  {
+    src: asset('/fotos/instagram/reproducciones.jpg'),
+    title: 'Reproducciones',
+    caption: '2.773.705 reproducciones y 701.214 espectadores en los últimos 90 días.',
+    alt: 'Estadísticas de reproducciones de Instagram: 2.773.705 reproducciones en 90 días',
+  },
+  {
+    src: asset('/fotos/instagram/interacciones.jpg'),
+    title: 'Interacciones',
+    caption: '37 mil en Reels, 15 mil en Historias y 8,7 mil en publicaciones.',
+    alt: 'Interacciones por tipo de contenido: Reels, Historias y publicaciones',
+  },
+  {
+    src: asset('/fotos/instagram/audiencia-lugares.jpg'),
+    title: 'Audiencia por país',
+    caption: 'México 39,3% · Venezuela 9,5% · EE. UU. 7,9% · Chile 6,6% · Colombia 6,3%.',
+    alt: 'Principales países e idiomas de la audiencia de Instagram',
+  },
+  {
+    src: asset('/fotos/instagram/audiencia-genero.jpg'),
+    title: 'Género y edad',
+    caption: '64,7% mujeres; el 52,9% del público tiene entre 25 y 34 años.',
+    alt: 'Género y rango de edad de la audiencia de Instagram',
+  },
+];
+
+/** Capturas de las estadísticas de TikTok, en orden narrativo. */
+export const tiktokShots: StatShot[] = [
+  {
+    src: asset('/fotos/tiktok/perfil.jpg'),
+    title: 'Perfil',
+    caption: '69,2 mil seguidores · 1,5 mill. de me gusta · 156 siguiendo.',
+    alt: 'Perfil de TikTok de Katha Tenorio con 69,2 mil seguidores y 1,5 millones de me gusta',
+  },
+  {
+    src: asset('/fotos/tiktok/espectadores.jpg'),
+    title: 'Espectadores',
+    caption: '22,1 mil espectadores y 16,7 mil nuevos en los últimos 28 días.',
+    alt: 'Métricas de espectadores de TikTok: 22,1 mil totales y 16,7 mil nuevos',
+  },
+  {
+    src: asset('/fotos/tiktok/rendimiento.jpg'),
+    title: 'Rendimiento',
+    caption: '33 mil visualizaciones, 1,3 mil me gusta y 131 comentarios en 28 días.',
+    alt: 'Resumen de métricas clave de TikTok: visualizaciones, me gusta y comentarios',
+  },
+  {
+    src: asset('/fotos/tiktok/audiencia-pais.jpg'),
+    title: 'Audiencia por país',
+    caption: 'Chile 26,6% · México 21,5% · Venezuela 15,7% · Colombia 6,3% · Ecuador 4,4%.',
+    alt: 'Ubicaciones de la audiencia de TikTok por país',
+  },
+  {
+    src: asset('/fotos/tiktok/audiencia-edad.jpg'),
+    title: 'Edad',
+    caption: '25 a 34 años 28,4% · 35 a 44 28,2% · 45 a 54 21,8%.',
+    alt: 'Rango de edad de la audiencia de TikTok',
+  },
+  {
+    src: asset('/fotos/tiktok/audiencia-sexo.jpg'),
+    title: 'Sexo',
+    caption: '68% hombres · 31% mujeres · 1% otro.',
+    alt: 'Distribución por sexo de la audiencia de TikTok',
+  },
 ];
 
 export const purpose = {

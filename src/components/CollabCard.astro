@@ -5,37 +5,87 @@ interface Props {
   colab: Collaboration;
 }
 const { colab } = Astro.props;
+const featured = Boolean(colab.photos?.length);
 ---
 
-<article class="card colab" data-collab={colab.brand}>
-  <div class="colab-media" data-media>
-    {colab.video ? (
-      <video
-        class="colab-video"
-        data-video
-        src={colab.video.src}
-        poster={thumbOf(colab.image)}
-        controls
-        preload="none"
-        playsinline
-        aria-label={`Video de ${colab.brand}`}
-      />
-    ) : (
-      <img
-        src={thumbOf(colab.image)}
-        alt={`${colab.brand} — ${colab.campaign}`}
-        loading="lazy"
-        decoding="async"
-        width="520"
-        height="390"
-      />
+<article class:list={['card', 'colab', { 'colab-featured': featured }]} data-collab={colab.brand}>
+  <div class:list={['colab-media', { 'colab-split': featured }]} data-media>
+    <div class="colab-media-main">
+      {colab.video ? (
+        <video
+          class="colab-video"
+          data-video
+          src={colab.video.src}
+          poster={thumbOf(colab.image)}
+          controls
+          preload="none"
+          playsinline
+          aria-label={`Video de ${colab.brand}`}
+        />
+      ) : (
+        <img
+          src={thumbOf(colab.image)}
+          alt={`${colab.brand} — ${colab.campaign}`}
+          loading="lazy"
+          decoding="async"
+          width="520"
+          height="390"
+        />
+      )}
+    </div>
+
+    {featured && (
+      <div
+        class="colab-carousel stats-carousel"
+        data-carousel
+        role="region"
+        aria-roledescription="carrusel"
+        aria-label={`Fotos de ${colab.brand}`}
+      >
+        <div class="carousel-viewport" data-carousel-viewport>
+          <div class="carousel-track">
+            {colab.photos!.map((photo, index) => (
+              <figure class="carousel-slide" data-carousel-slide>
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width="900"
+                  height="675"
+                />
+                <figcaption>
+                  <strong>{photo.title}</strong>
+                  <span>{photo.caption}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button type="button" class="carousel-btn" data-carousel-prev aria-label="Foto anterior">←</button>
+          <div class="carousel-dots" data-carousel-dots></div>
+          <button type="button" class="carousel-btn" data-carousel-next aria-label="Foto siguiente">→</button>
+        </div>
+      </div>
     )}
   </div>
   <div class="body">
-    {colab.type && <span class="type">{colab.type}</span>}
-    <h3>{colab.brand}</h3>
-    {colab.campaign && <p style="color: var(--muted); margin: 0;">{colab.campaign}</p>}
-    {colab.description && <p style="color: var(--muted); margin: 0;">{colab.description}</p>}
+    {colab.type && !colab.hideType && <span class="type">{colab.type}</span>}
+    {!colab.hideTitle && <h3>{colab.brand}</h3>}
+    {colab.campaign && !colab.hideCampaign && <p style="color: var(--muted); margin: 0;">{colab.campaign}</p>}
+    {colab.description && (
+      <p class:list={['colab-description', { 'description-accent': colab.descriptionAccent }]}>
+        {colab.description}
+      </p>
+    )}
+    {colab.projects && (
+      <ol class="colab-projects">
+        {colab.projects.map((project) => (
+          <li><strong>{project.title}:</strong> {project.text}</li>
+        ))}
+      </ol>
+    )}
     {colab.result && <p class="result">Resultado: {colab.result}</p>}
     <div class="colab-foot">
       {colab.video?.url && (
