@@ -5,6 +5,10 @@
  * Cambia los textos, la galería y las colaboraciones aquí.
  */
 
+const BASE = import.meta.env.BASE_URL;
+/** Antepone la base del sitio (/portafolio/) a las rutas de public/. */
+export const asset = (path: string) => `${BASE}${path.replace(/^\//, '')}`;
+
 export const profile = {
   name: 'Katha Tenorio',
   role: 'Creadora digital · Accesibilidad, inclusión y movilidad',
@@ -21,40 +25,40 @@ export const profile = {
     tiktok: '@kathatenorio',
     tiktokUrl: 'https://www.tiktok.com/@kathatenorio',
   },
-  photo: '/fotos/katha-1.jpg',
+  photo: asset('/fotos/katha-1.jpg'),
   photos: [
-    { src: '/fotos/katha-1.jpg', alt: 'Katha en silla de ruedas' },
-    { src: '/fotos/katha-2.jpg', alt: 'Primer plano de Katha' },
-    { src: '/fotos/katha-3.jpg', alt: 'Katha sentada de blanco' },
-    { src: '/fotos/katha-4.jpg', alt: 'Katha de negro con collar dorado' },
-    { src: '/fotos/katha-5.jpg', alt: 'Retrato de Katha' },
-    { src: '/fotos/katha-6.jpg', alt: 'Katha de blanco sentada' },
-    { src: '/fotos/katha-7.jpg', alt: 'Katha sonriendo con la mano en la mejilla' },
-    { src: '/fotos/katha-8.jpg', alt: 'Katha de negro con tenis blancos' },
-    { src: '/fotos/katha-9.jpg', alt: 'Katha con salida de pelo' },
-    { src: '/fotos/katha-10.jpg', alt: 'Retrato de Katha' },
-    { src: '/fotos/katha-11.jpg', alt: 'Katha en la sesion de fotos 11' },
-    { src: '/fotos/katha-12.jpg', alt: 'Katha en la sesion de fotos 12' },
-    { src: '/fotos/katha-13.jpg', alt: 'Katha en la sesion de fotos 13' },
-    { src: '/fotos/katha-14.jpg', alt: 'Katha en la sesion de fotos 14' },
-    { src: '/fotos/katha-15.jpg', alt: 'Katha en la sesion de fotos 15' },
-    { src: '/fotos/katha-16.jpg', alt: 'Katha en la sesion de fotos 16' },
-    { src: '/fotos/katha-17.jpg', alt: 'Katha en la sesion de fotos 17' },
-    { src: '/fotos/katha-18.jpg', alt: 'Katha en la sesion de fotos 18' },
-    { src: '/fotos/katha-19.jpg', alt: 'Katha en la sesion de fotos 19' },
-    { src: '/fotos/katha-20.jpg', alt: 'Katha en la sesion de fotos 20' },
-    { src: '/fotos/katha-21.jpg', alt: 'Katha en la sesion de fotos 21' },
-    { src: '/fotos/katha-22.jpg', alt: 'Katha en la sesion de fotos 22' },
-    { src: '/fotos/katha-23.jpg', alt: 'Katha en la sesion de fotos 23' },
-    { src: '/fotos/katha-24.jpg', alt: 'Katha en la sesion de fotos 24' },
-    { src: '/fotos/katha-25.jpg', alt: 'Katha en la sesion de fotos 25' },
-    { src: '/fotos/katha-26.jpg', alt: 'Katha en la sesion de fotos 26' },
-    { src: '/fotos/katha-27.jpg', alt: 'Katha en la sesion de fotos 27' },
-    { src: '/fotos/katha-28.jpg', alt: 'Katha en la sesion de fotos 28' },
-    { src: '/fotos/katha-29.jpg', alt: 'Katha en la sesion de fotos 29' },
-    { src: '/fotos/katha-30.jpg', alt: 'Katha en la sesion de fotos 30' },
+    { src: asset('/fotos/katha-1.jpg'), alt: 'Katha en silla de ruedas' },
+    { src: asset('/fotos/katha-2.jpg'), alt: 'Primer plano de Katha' },
+    { src: asset('/fotos/katha-3.jpg'), alt: 'Katha sentada de blanco' },
+    { src: asset('/fotos/katha-4.jpg'), alt: 'Katha de negro con collar dorado' },
+    { src: asset('/fotos/katha-5.jpg'), alt: 'Retrato de Katha' },
+    { src: asset('/fotos/katha-6.jpg'), alt: 'Katha de blanco sentada' },
+    { src: asset('/fotos/katha-7.jpg'), alt: 'Katha sonriendo con la mano en la mejilla' },
+    { src: asset('/fotos/katha-8.jpg'), alt: 'Katha de negro con tenis blancos' },
+    { src: asset('/fotos/katha-9.jpg'), alt: 'Katha con salida de pelo' },
+    { src: asset('/fotos/katha-10.jpg'), alt: 'Retrato de Katha' },
+    { src: asset('/fotos/katha-11.jpg'), alt: 'Katha en la sesion de fotos 11' },
+    { src: asset('/fotos/katha-12.jpg'), alt: 'Katha en la sesion de fotos 12' },
+    { src: asset('/fotos/katha-13.jpg'), alt: 'Katha en la sesion de fotos 13' },
+    { src: asset('/fotos/katha-14.jpg'), alt: 'Katha en la sesion de fotos 14' },
+    { src: asset('/fotos/katha-15.jpg'), alt: 'Katha en la sesion de fotos 15' },
+    { src: asset('/fotos/katha-16.jpg'), alt: 'Katha en la sesion de fotos 16' },
+    { src: asset('/fotos/katha-17.jpg'), alt: 'Katha en la sesion de fotos 17' },
+    { src: asset('/fotos/katha-18.jpg'), alt: 'Katha en la sesion de fotos 18' },
+    { src: asset('/fotos/katha-19.jpg'), alt: 'Katha en la sesion de fotos 19' },
+    { src: asset('/fotos/katha-20.jpg'), alt: 'Katha en la sesion de fotos 20' },
+    { src: asset('/fotos/katha-21.jpg'), alt: 'Katha en la sesion de fotos 21' },
+    { src: asset('/fotos/katha-22.jpg'), alt: 'Katha en la sesion de fotos 22' },
+    { src: asset('/fotos/katha-23.jpg'), alt: 'Katha en la sesion de fotos 23' },
+    { src: asset('/fotos/katha-24.jpg'), alt: 'Katha en la sesion de fotos 24' },
+    { src: asset('/fotos/katha-25.jpg'), alt: 'Katha en la sesion de fotos 25' },
+    { src: asset('/fotos/katha-26.jpg'), alt: 'Katha en la sesion de fotos 26' },
+    { src: asset('/fotos/katha-27.jpg'), alt: 'Katha en la sesion de fotos 27' },
+    { src: asset('/fotos/katha-28.jpg'), alt: 'Katha en la sesion de fotos 28' },
+    { src: asset('/fotos/katha-29.jpg'), alt: 'Katha en la sesion de fotos 29' },
+    { src: asset('/fotos/katha-30.jpg'), alt: 'Katha en la sesion de fotos 30' },
   ],
-  portrait: '/fotos/katha-retrato.jpg',
+  portrait: asset('/fotos/katha-retrato.jpg'),
 };
 
 export const proposal = [
@@ -188,10 +192,10 @@ export const collaborations: Collaboration[] = [
       'Creadora de contenido para Instagram y TikTok, con libertad de creación, edición y calendario de publicación.',
     result:
       'Serie de videos sobre el beneficio del uso de la triciclo, destacando la facilidad de desplazamiento con mínimo esfuerzo para personas con limitaciones físicas.',
-    image: '/fotos/colab-moving-life.jpg',
+    image: asset('/fotos/colab-moving-life.jpg'),
     href: '',
     video: {
-      src: '/videos/moving-life-1.mp4',
+      src: asset('/videos/moving-life-1.mp4'),
       url: 'https://www.instagram.com/reel/DIHyEDGA6-j/?utm_source=ig_web_copy_link&dlrf=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -203,10 +207,10 @@ export const collaborations: Collaboration[] = [
       'Guión y edición del video para la campaña de tratamientos de belleza con doctores.',
     result:
       'Mostrar la importancia de aplicarse tratamientos de belleza con doctores en lugares seguros, para conseguir resultados seguros y lo más naturales posibles.',
-    image: '/fotos/colab-reskin.jpg',
+    image: asset('/fotos/colab-reskin.jpg'),
     href: '',
     video: {
-      src: '/videos/reskin-pamela.mp4',
+      src: asset('/videos/reskin-pamela.mp4'),
       url: 'https://www.instagram.com/reel/Dcg6cqqBak4/?utm_source=ig_web_copy_link&exln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -217,10 +221,10 @@ export const collaborations: Collaboration[] = [
     description:
       '¿Quién pone los límites? Un capítulo en el que hablo desde mi punto de vista lo complicado que es mentalmente afrontar el cambio físico, el cómo te trata ahora la sociedad y los límites estructurales del país cuando se tiene una discapacidad.',
     result: '',
-    image: '/fotos/colab-inclusion.jpg',
+    image: asset('/fotos/colab-inclusion.jpg'),
     href: '',
     video: {
-      src: '/videos/inclusion.mp4',
+      src: asset('/videos/inclusion.mp4'),
       url: 'https://www.instagram.com/reel/DE01UBUOkG-/?utm_source=ig_web_copy_link&dlrf=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -231,10 +235,10 @@ export const collaborations: Collaboration[] = [
     description:
       'Es un concepto japonés, un lugar totalmente adaptado para personas con limitaciones físicas, visuales y auditivas entre otras, haciéndolo un espacio inclusivo y amigable con los perros.',
     result: '',
-    image: '/fotos/colab-viajes.jpg',
+    image: asset('/fotos/colab-viajes.jpg'),
     href: '',
     video: {
-      src: '/videos/viajes.mp4',
+      src: asset('/videos/viajes.mp4'),
       url: 'https://www.instagram.com/reel/DOMovg2kg5i/?utm_source=ig_web_copy_link&cplk=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -245,10 +249,10 @@ export const collaborations: Collaboration[] = [
     description:
       'Durante 2 años trabajé como imagen de inclusión laboral para Nestlé, en donde se llevaron a cabo diversos proyectos como Alianza del Pacífico, Jóvenes Construyendo el Futuro, B2B Exponencial, entre otras, con mi participación a nivel nacional.',
     result: '',
-    image: '/fotos/colab-tecnologia.jpg',
+    image: asset('/fotos/colab-tecnologia.jpg'),
     href: '',
     video: {
-      src: '/videos/tecnologia.mp4',
+      src: asset('/videos/tecnologia.mp4'),
       url: 'https://www.instagram.com/reel/CsVGRKWNmmg/?utm_source=ig_web_copy_link&srtk=MzRlODBiNWFlZA==',
     },
   },
@@ -259,22 +263,22 @@ export const collaborations: Collaboration[] = [
     description:
       'Frente a más de 300 personas de forma presencial y cámaras de TV nacional para diferentes países del Pacífico, expuse el proyecto de inclusión que tendría Nestlé México. Asimismo, rueda de prensa para dar respuestas a dudas sobre el proyecto del que yo era imagen de inclusión.',
     result: '',
-    image: '/fotos/colab-sexta.jpg',
+    image: asset('/fotos/colab-sexta.jpg'),
     href: '',
     video: {
-      src: '/videos/sexta.mp4',
+      src: asset('/videos/sexta.mp4'),
       url: 'https://www.instagram.com/reel/Cj9F5kYjQkF/?utm_source=ig_web_copy_link&psln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
 ];
 
 export const gallery = [
-  { src: '/fotos/galeria-1.jpg', alt: 'Katha en la costa de Lechería' },
-  { src: '/fotos/galeria-2.jpg', alt: 'Ruta accesible por Ciudad de México' },
-  { src: '/fotos/galeria-3.jpg', alt: 'Katha frente a la cordillera de los Andes' },
-  { src: '/fotos/galeria-4.jpg', alt: 'Detalle de la silla de ruedas' },
-  { src: '/fotos/galeria-5.jpg', alt: 'Sesión de fotos para una campaña' },
-  { src: '/fotos/galeria-6.jpg', alt: 'Presentación de una experiencia accesible' },
+  { src: asset('/fotos/galeria-1.jpg'), alt: 'Katha en la costa de Lechería' },
+  { src: asset('/fotos/galeria-2.jpg'), alt: 'Ruta accesible por Ciudad de México' },
+  { src: asset('/fotos/galeria-3.jpg'), alt: 'Katha frente a la cordillera de los Andes' },
+  { src: asset('/fotos/galeria-4.jpg'), alt: 'Detalle de la silla de ruedas' },
+  { src: asset('/fotos/galeria-5.jpg'), alt: 'Sesión de fotos para una campaña' },
+  { src: asset('/fotos/galeria-6.jpg'), alt: 'Presentación de una experiencia accesible' },
 ];
 
 export const purpose = {

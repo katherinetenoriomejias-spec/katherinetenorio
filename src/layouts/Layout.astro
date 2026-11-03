@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { profile } from '../content/kit';
+import { profile, asset } from '../content/kit';
 
 interface Props {
   title?: string;
@@ -21,7 +21,7 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="profile" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -78,11 +78,10 @@ const {
           <a href={profile.social.instagramUrl} target="_blank" rel="noopener">{profile.social.instagram}</a>
           <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">{profile.social.tiktok}</a>
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
-          <a href="/terms">Términos</a>
-          <a href="/privacy">Privacidad</a>
+          <a href={asset('/terms/')}>Términos</a>
+          <a href={asset('/privacy/')}>Privacidad</a>
         </div>
       </div>
     </footer>
-    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>
