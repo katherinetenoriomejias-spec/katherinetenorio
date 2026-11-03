@@ -1,5 +1,5 @@
 ---
-import type { Collaboration } from '../content/kit';
+import { thumbOf, type Collaboration } from '../content/kit';
 
 interface Props {
   colab: Collaboration;
@@ -14,7 +14,7 @@ const { colab } = Astro.props;
         class="colab-video"
         data-video
         src={colab.video.src}
-        poster={colab.image}
+        poster={thumbOf(colab.image)}
         controls
         preload="none"
         playsinline
@@ -22,11 +22,12 @@ const { colab } = Astro.props;
       />
     ) : (
       <img
-        src={colab.image}
+        src={thumbOf(colab.image)}
         alt={`${colab.brand} — ${colab.campaign}`}
         loading="lazy"
-        width="1200"
-        height="900"
+        decoding="async"
+        width="520"
+        height="390"
       />
     )}
   </div>

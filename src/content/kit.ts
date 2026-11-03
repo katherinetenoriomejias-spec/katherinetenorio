@@ -8,6 +8,8 @@
 const BASE = import.meta.env.BASE_URL;
 /** Antepone la base del sitio (/portafolio/) a las rutas de public/. */
 export const asset = (path: string) => `${BASE}${path.replace(/^\//, '')}`;
+/** Ruta de la miniatura ligera de una foto de public/fotos. */
+export const thumbOf = (src: string) => src.replace('/fotos/', '/fotos/thumbs/');
 
 export const profile = {
   name: 'Katha Tenorio',
@@ -185,6 +187,20 @@ export const packages: MediaPackage[] = [
 
 export const collaborations: Collaboration[] = [
   {
+    brand: 'Conferencia',
+    campaign: 'Alianza del Pacífico · Nestlé México',
+    type: 'Ponente',
+    description:
+      'Frente a más de 300 personas de forma presencial y cámaras de TV nacional para diferentes países del Pacífico, expuse el proyecto de inclusión que tendría Nestlé México. Asimismo, rueda de prensa para dar respuestas a dudas sobre el proyecto del que yo era imagen de inclusión.',
+    result: '',
+    image: asset('/fotos/colab-sexta.jpg'),
+    href: '',
+    video: {
+      src: asset('/videos/sexta.mp4'),
+      url: 'https://www.instagram.com/reel/Cj9F5kYjQkF/?utm_source=ig_web_copy_link&psln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
+    },
+  },
+  {
     brand: 'Moving Life México',
     campaign: 'Embajadora de Movinglife. México 2025 - 2027.',
     type: 'Embajadora / Creadora de contenido',
@@ -254,20 +270,6 @@ export const collaborations: Collaboration[] = [
     video: {
       src: asset('/videos/tecnologia.mp4'),
       url: 'https://www.instagram.com/reel/CsVGRKWNmmg/?utm_source=ig_web_copy_link&srtk=MzRlODBiNWFlZA==',
-    },
-  },
-  {
-    brand: 'Conferencia',
-    campaign: 'Alianza del Pacífico · Nestlé México',
-    type: 'Ponente',
-    description:
-      'Frente a más de 300 personas de forma presencial y cámaras de TV nacional para diferentes países del Pacífico, expuse el proyecto de inclusión que tendría Nestlé México. Asimismo, rueda de prensa para dar respuestas a dudas sobre el proyecto del que yo era imagen de inclusión.',
-    result: '',
-    image: asset('/fotos/colab-sexta.jpg'),
-    href: '',
-    video: {
-      src: asset('/videos/sexta.mp4'),
-      url: 'https://www.instagram.com/reel/Cj9F5kYjQkF/?utm_source=ig_web_copy_link&psln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==',
     },
   },
 ];

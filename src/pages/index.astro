@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CollabCard from '../components/CollabCard.astro';
-import { profile, proposal, services, collaborations, packages, purpose, asset } from '../content/kit';
+import { profile, proposal, services, collaborations, packages, purpose, asset, thumbOf } from '../content/kit';
 
 const fmt = (value: number | null) =>
   value === null ? '—' : new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
@@ -28,13 +28,21 @@ const stats = {
       <div class="hero-gallery" data-gallery>
         <div class="hero-track" data-track>
           {profile.photos.map((photo, index) => (
-            <figure class="hero-shot" data-shot={index}>
+            <figure
+              class="hero-shot"
+              data-shot={index}
+              data-full={photo.src}
+              role="button"
+              tabindex="0"
+              aria-label={`Ampliar foto: ${photo.alt}`}
+            >
               <img
-                src={photo.src}
+                src={thumbOf(photo.src)}
                 alt={photo.alt}
                 loading={index < 3 ? 'eager' : 'lazy'}
-                width="800"
-                height="1200"
+                decoding="async"
+                width="346"
+                height="520"
               />
             </figure>
           ))}
@@ -164,8 +172,9 @@ const stats = {
         src={asset('/fotos/katha-propuesta.jpg')}
         alt="Katha en silla de ruedas, de blanco, recostada en el suelo"
         loading="lazy"
-        width="2000"
-        height="1332"
+        decoding="async"
+        width="1600"
+        height="1066"
       />
     </div>
   </section>
@@ -280,7 +289,18 @@ const stats = {
     </div>
   </section>
 
-
+  <!-- Visor de imagen: la foto completa se carga solo al hacer clic -->
+  <div
+    class="lightbox"
+    data-lightbox
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-label="Imagen ampliada"
+  >
+    <button class="lightbox-close" type="button" data-lightbox-close aria-label="Cerrar">×</button>
+    <img data-lightbox-img alt="" decoding="async" />
+  </div>
 </Layout>
 
 <script>
@@ -449,4 +469,48 @@ const stats = {
 
   refresh();
   setInterval(refresh, 5 * 60 * 1000);
+</script>
+
+<script>
+  // Visor de fotos: la imagen completa se descarga solo al hacer clic.
+  const box = document.querySelector<HTMLElement>('[data-lightbox]');
+  const boxImg = box?.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  const closeBtn = box?.querySelector<HTMLElement>('[data-lightbox-close]');
+
+  const openLightbox = (src: string, alt: string) => {
+    if (!box || !boxImg) return;
+    boxImg.src = src;
+    boxImg.alt = alt;
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    if (!box || !boxImg) return;
+    box.hidden = true;
+    boxImg.removeAttribute('src');
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-full]').forEach((figure) => {
+    const trigger = () => {
+      const img = figure.querySelector('img');
+      openLightbox(figure.dataset.full!, img?.alt ?? '');
+    };
+    figure.addEventListener('click', trigger);
+    figure.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        trigger();
+      }
+    });
+  });
+
+  box?.addEventListener('click', (event) => {
+    if (event.target === box) closeLightbox();
+  });
+  closeBtn?.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && box && !box.hidden) closeLightbox();
+  });
 </script>

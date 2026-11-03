@@ -155,6 +155,11 @@ section { padding: 5rem 0; }
   border: 1px solid var(--line);
   background: linear-gradient(160deg, var(--pink-soft), var(--paper-2));
   padding: 0.6rem;
+  cursor: zoom-in;
+}
+.hero-shot:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
 }
 .hero-shot img {
   display: block;
@@ -529,3 +534,41 @@ footer .inner { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: spac
 .social { display: flex; gap: 1.2rem; }
 .social a { text-decoration: none; }
 .social a:hover { color: var(--pink); }
+
+/* Visor de imagen (lightbox) */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: rgba(12, 10, 14, 0.9);
+}
+.lightbox[hidden] { display: none; }
+.lightbox img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(94vw, 1100px);
+  max-height: 88vh;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: rgba(255, 61, 154, 0.85); }
