@@ -179,25 +179,6 @@ const stats = {
     </div>
   </section>
 
-  <!-- SERVICIOS -->
-  <section id="servicios">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Servicios</span>
-        <h2>Cómo podemos trabajar juntos</h2>
-      </div>
-      <div class="grid grid-3">
-        {services.map((service) => (
-          <article class="card">
-            <span class="tag">Servicio</span>
-            <h3>{service.title}</h3>
-            <p>{service.text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- PROPÓSITO -->
   <section id="proposito">
     <div class="container">
@@ -219,6 +200,25 @@ const stats = {
       </div>
       <div class="grid grid-2">
         {collaborations.map((colab) => <CollabCard colab={colab} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Servicios</span>
+        <h2>Cómo podemos trabajar juntos</h2>
+      </div>
+      <div class="grid grid-3">
+        {services.map((service) => (
+          <article class="card">
+            <span class="tag">Servicio</span>
+            <h3>{service.title}</h3>
+            <p>{service.text}</p>
+          </article>
+        ))}
       </div>
     </div>
   </section>
