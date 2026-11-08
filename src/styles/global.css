@@ -429,8 +429,50 @@ section { padding: 5rem 0; }
   margin-bottom: 0.7rem;
 }
 
-/* Feed de Instagram */
-.feed {
+/* Servicios en paquetes (3 cuadros verticales, uno al lado del otro) */
+.services-stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; align-items: stretch; }
+.service-card { max-width: none; display: flex; flex-direction: column; }
+.service-text { white-space: pre-line; }
+.services-note { color: var(--ink); font-size: 0.85rem; font-weight: 700; line-height: 1.6; margin: 1.6rem 0 0; white-space: normal; }
+
+@media (max-width: 640px) {
+  .services-stack { grid-template-columns: 1fr; }
+}
+
+/* Conferencias y ponencias (carrusel de cuadros verticales) */
+.talks-carousel { min-width: 0; }
+.talks-carousel .carousel-slide {
+  flex: 0 0 clamp(210px, 26%, 275px);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.35rem;
+  gap: 0.45rem;
+  overflow: visible;
+}
+.talks-carousel .talk-card .tag {
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+.talks-carousel .talk-card h3 { font-size: 1rem; line-height: 1.3; margin: 0; }
+.talks-carousel .talk-card p { margin: 0; color: var(--muted); font-size: 0.86rem; line-height: 1.55; white-space: pre-line; }
+.talks-carousel .carousel-btn { border-color: var(--line); background: #fff; color: var(--ink); }
+.talks-carousel .carousel-btn:hover { background: var(--pink); border-color: var(--pink); color: #fff; }
+.talks-carousel .carousel-btn:disabled:hover { background: #fff; border-color: var(--line); }
+.talks-carousel .carousel-dots .dot { background: rgba(22, 19, 26, 0.18); }
+.talks-carousel .carousel-dots .dot.active { background: var(--pink); }
+
+@media (max-width: 720px) {
+  .talks-carousel .carousel-slide { flex-basis: 76%; }
+}
+.talks-note { margin: 1.6rem 0 0; font-size: 0.85rem; font-weight: 700; line-height: 1.6; color: var(--ink); }
+
+/* Feed de Instagram */.feed {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.7rem;
@@ -461,9 +503,12 @@ section { padding: 5rem 0; }
 /* Títulos de una sola línea */
 #colaboraciones .section-head h2,
 #planes .section-head h2 { white-space: nowrap; }
+#servicios .section-head { max-width: none; }
+#servicios .section-head h2 { white-space: nowrap; }
 @media (max-width: 760px) {
   #colaboraciones .section-head h2,
   #planes .section-head h2 { white-space: normal; }
+  #servicios .section-head h2 { white-space: normal; }
 }
 
 /* Planes */

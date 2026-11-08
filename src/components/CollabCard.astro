@@ -16,7 +16,7 @@ const featured = Boolean(colab.photos?.length);
           class="colab-video"
           data-video
           src={colab.video.src}
-          poster={thumbOf(colab.image)}
+          poster={colab.poster ?? thumbOf(colab.image)}
           controls
           preload="none"
           playsinline
@@ -25,7 +25,7 @@ const featured = Boolean(colab.photos?.length);
       ) : (
         <img
           src={thumbOf(colab.image)}
-          alt={`${colab.brand} — ${colab.campaign}`}
+          alt={`${colab.brand}${colab.campaign ? ` — ${colab.campaign}` : ''}`}
           loading="lazy"
           decoding="async"
           width="520"
@@ -93,7 +93,7 @@ const featured = Boolean(colab.photos?.length);
           Ver en la red ↗
         </a>
       )}
-      {colab.href && <a href={colab.href} target="_blank" rel="noopener">Ver proyecto ↗</a>}
+      {colab.href && <a href={colab.href} target="_blank" rel="noopener">{colab.linkLabel ?? 'Ver proyecto ↗'}</a>}
     </div>
   </div>
 </article>

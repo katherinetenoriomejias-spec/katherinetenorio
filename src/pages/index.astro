@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import CollabCard from '../components/CollabCard.astro';
-import { profile, proposal, services, collaborations, packages, purpose, gallery, instagramShots, tiktokShots, asset, thumbOf } from '../content/kit';
+import { profile, services, talks, collaborations, packages, purpose, instagramShots, tiktokShots, asset, thumbOf } from '../content/kit';
 
 const num = (value: number | null) =>
   value === null ? '—' : new Intl.NumberFormat('es-ES').format(value);
@@ -59,7 +59,7 @@ const stats = {
       </div>
 
       <div class="meta-row">
-        <b class="meta-value">Ciudad de México</b>
+        <b class="meta-value">Santiago de Chile</b>
         <b class="meta-value">{profile.languages.join(' · ')}</b>
         <b class="meta-value">@{profile.social.instagram.replace('@', '')}</b>
         <span class="meta-label">Base</span>
@@ -225,7 +225,7 @@ const stats = {
   <section class="feature-photo">
     <div class="container">
       <img
-        src={asset('/fotos/katha-propuesta.jpg')}
+        src={asset('/fotos/katha-propuesta.webp')}
         alt="Katha en silla de ruedas, de blanco, recostada en el suelo"
         loading="lazy"
         decoding="async"
@@ -249,73 +249,60 @@ const stats = {
     </div>
   </section>
 
-  <!-- MI PROPUESTA -->
-  <section id="propuesta">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Mi propuesta</span>
-        <h2>Áreas en las que trabajo</h2>
-        <p class="lead">
-          Todo lo que produzco nace de la experiencia propia y de una audiencia real.
-        </p>
-      </div>
-      <div class="proposal-list">
-        {proposal.map((item) => (
-          <article class="proposal-item">
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- COLLAGE DE FOTOS -->
-  <section id="galeria" style="background: var(--paper-2);">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Galería</span>
-        <h2>Momentos que cuentan historias</h2>
-      </div>
-      <div class="photo-collage">
-        {gallery.map((photo, index) => (
-          <figure
-            class={`collage-item item-${index + 1}`}
-            data-full={photo.src}
-            role="button"
-            tabindex="0"
-            aria-label={`Ampliar foto: ${photo.alt}`}
-          >
-            <img
-              src={thumbOf(photo.src)}
-              alt={photo.alt}
-              loading="lazy"
-              decoding="async"
-              width="520"
-              height="520"
-            />
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- SERVICIOS -->
   <section id="servicios">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Servicios</span>
-        <h2>Cómo podemos trabajar juntos</h2>
+        <span class="eyebrow">Trabajemos juntos</span>
+        <h2>Elige el paquete que mejor se adapte y comencemos</h2>
       </div>
-      <div class="grid grid-3">
+      <div class="services-stack">
         {services.map((service) => (
-          <article class="card">
-            <span class="tag">Servicio</span>
+          <article class="card service-card">
+            <span class="tag">{service.tag}</span>
             <h3>{service.title}</h3>
-            <p>{service.text}</p>
+            <p class="service-text">{service.text}</p>
           </article>
         ))}
       </div>
+
+      <p class="services-note">Derechos de uso en los anuncios de la marca +40%. Exclusividad adicional: +25%. Entrega urgente (menos de 5 días): +25%.</p>
+    </div>
+  </section>
+
+  <!-- CONFERENCIAS -->
+  <section id="conferencias" style="background: var(--paper-2);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Conferencias</span>
+        <h2>Ponencias en español</h2>
+      </div>
+      <div
+        class="talks-carousel"
+        data-carousel
+        role="region"
+        aria-roledescription="carrusel"
+        aria-label="Opciones de conferencias y ponencias"
+      >
+        <div class="carousel-viewport" data-carousel-viewport>
+          <div class="carousel-track">
+            {talks.map((talk) => (
+              <article class="carousel-slide talk-card" data-carousel-slide>
+                <span class="tag">{talk.tag}</span>
+                <h3>{talk.title}</h3>
+                <p>{talk.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button type="button" class="carousel-btn" data-carousel-prev aria-label="Opción anterior">←</button>
+          <div class="carousel-dots" data-carousel-dots></div>
+          <button type="button" class="carousel-btn" data-carousel-next aria-label="Opción siguiente">→</button>
+        </div>
+      </div>
+
+      <p class="talks-note">Todos los espacios deben de ser accesibles (rampas, baño, transporte accesible).</p>
     </div>
   </section>
 
@@ -634,7 +621,7 @@ const stats = {
       const dot = document.createElement('button');
       dot.type = 'button';
       dot.className = 'dot';
-      dot.setAttribute('aria-label', `Ver captura ${index + 1} de ${slides.length}`);
+      dot.setAttribute('aria-label', `Ver elemento ${index + 1} de ${slides.length}`);
       dot.addEventListener('click', () => {
         const left = slides[index].offsetLeft - slides[0].offsetLeft;
         viewport.scrollTo({ left, behavior: 'smooth' });
