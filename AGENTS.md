@@ -12,6 +12,19 @@ Sitio en producción: **https://kathatenorio.com** (media kit de Katha Tenorio).
 - Archivos de despliegue: `Dockerfile`, `docker-compose.yml`, `docker/nginx/default.conf`,
   `deploy.sh`, `deploy-media.sh`, `.dockerignore`.
 
+## Desarrollo local
+
+- `bun run dev` (o `npm run dev`) → `http://localhost:4321` con recarga en vivo. Es lo que
+  se usa para editar y probar; no requiere Docker.
+- `bun run build` genera `dist/`. Para ver el build final:
+  `cd dist && python3 -m http.server 8765 --bind 127.0.0.1` → `http://127.0.0.1:8765/`.
+  Servir la raíz del proyecto con `http.server` muestra fuentes, no el HTML compilado.
+- El preview del puerto `4331` es un build viejo: no usarlo para validar cambios.
+- `public/videos` se ve en local y en `dist`, pero queda fuera de la imagen Docker; en el
+  VPS se monta `/opt/media/kathatenorio/videos` y se actualiza con `./deploy-media.sh`.
+- El favicon se versiona por hash en `Layout.astro`; tras cambiarlo basta rebuild.
+  Cloudflare cachea los estáticos 30 días: purga la caché si el cambio no aparece.
+
 ## Cómo se publica
 
 Contenedor `pagina-kathatenorio` en la red externa `proxy`:

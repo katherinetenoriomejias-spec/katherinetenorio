@@ -12,9 +12,34 @@ que se actualizan solas**.
 
 ```bash
 npm install     # o: bun install
-npm run dev     # http://localhost:4321
-npm run build
+npm run dev     # http://localhost:4321 (recarga en vivo)
+npm run build   # genera dist/
 ```
+
+### Desarrollo local
+
+- `npm run dev` sirve desde `src/` con recarga en vivo (puerto **4321**). Es el comando
+  para editar y ver los cambios al instante.
+- `npm run build` genera el sitio final en `dist/`. Para revisar el build tal como se
+  publica:
+
+  ```bash
+  cd dist
+  python3 -m http.server 8765 --bind 127.0.0.1
+  # http://127.0.0.1:8765/
+  ```
+
+  No uses `http.server` desde la raíz del proyecto: ahí están los fuentes, no el HTML final.
+- El puerto **4331** corresponde a un preview viejo; no lo uses para validar cambios.
+- Los vídeos se ven desde `public/videos/` en local. En producción **no van en la imagen**:
+  viven en `/opt/media/kathatenorio/videos` y se sincronizan con `./deploy-media.sh`.
+
+### Favicon y caché
+
+- `Layout.astro` versiona el icono con el hash del SVG (`/favicon.svg?v=<hash>`), así que
+  al cambiar `public/favicon.svg` la URL cambia sola en el siguiente build.
+- Cloudflare cachea los estáticos 30 días. Si un cambio no aparece, purga la caché del
+  dominio y fuerza la recarga en el navegador (`Cmd + Shift + R`).
 
 ## Estadísticas en vivo
 
