@@ -46,6 +46,37 @@ docker compose up -d --build
 
 El repo del VPS lee por HTTPS; no depende de la clave SSH de GitHub.
 
+### Dos formas de trabajo (y cuál pisa a cuál)
+
+**Desde fuera (Mac) — flujo normal y recomendado**
+
+1. Edita y prueba en local (`bun run dev`).
+2. Commitea el cambio.
+3. Ejecuta `./deploy.sh`.
+
+El script publica el commit y fuerza el checkout en el VPS (`checkout -f` + `git clean -fd`),
+así que cualquier cambio que esté solo en el VPS y no se haya commiteado **se descarta**.
+
+**Directo en el VPS — solo para urgencias o pruebas**
+
+1. Edita en `/opt/stacks/pagina-kathatenorio` y reconstruye con
+   `docker compose up -d --build`.
+2. Si el cambio debe permanecer, **commitealo allí** antes de volver a desplegar desde fuera.
+3. El checkout del VPS lee por HTTPS y no puede hacer push. Para devolver ese commit al
+   repo, desde el Mac:
+
+   ```bash
+   git remote add vps kathavps:/opt/stacks/pagina-kathatenorio   # solo la primera vez
+   git fetch vps
+   git cherry-pick <hash-del-commit-en-el-vps>
+   ```
+
+4. Vuelve a `./deploy.sh` desde el Mac. Si no traes el commit del VPS primero, el próximo
+   despliegue lo sobrescribe.
+
+Antes de desplegar desde fuera, puedes comprobar que el VPS no tenga cambios pendientes:
+`ssh kathavps "git -C /opt/stacks/pagina-kathatenorio status --short"`.
+
 ### Actualizar solo los vídeos
 
 ```bash

@@ -79,6 +79,19 @@ echo | openssl s_client -servername kathatenorio.com -connect kathatenorio.com:4
 - Para actualizar a mano en el VPS:
   `git fetch origin main && git checkout -f -B main origin/main && docker compose up -d --build`.
 
+### Flujo desde fuera vs. directo en el VPS
+
+- **Desde fuera (Mac):** editar → commit → `./deploy.sh`. El script hace push y después
+  `git clean -fd` + `git checkout -f` aquí: cualquier cambio local sin commitear se pierde.
+- **Directo en el VPS:** sirve para urgencias o pruebas
+  (`docker compose up -d --build`), pero este checkout es un espejo de solo lectura por
+  HTTPS. Si el cambio debe quedar, commitéalo aquí y tráelo al Mac antes del próximo
+  `./deploy.sh`:
+  `git fetch kathavps:/opt/stacks/pagina-kathatenorio main` (o genera un parche).
+  Si no lo traes, el próximo despliegue lo sobrescribe.
+- Antes de desplegar desde fuera, verifica que el VPS esté limpio:
+  `git -C /opt/stacks/pagina-kathatenorio status --short`.
+
 ## No hacer
 
 - `docker system prune -a --volumes` (puede borrar certificados y datos).

@@ -98,6 +98,10 @@ actualiza el checkout del VPS por HTTPS, conserva el `.env`, reconstruye la imag
 y levanta el contenedor. Los vídeos no se incluyen: se sincronizan aparte con
 `./deploy-media.sh`.
 
+**Dos flujos:** el normal es editar y commitear en local y ejecutar `./deploy.sh`. Si editas
+directo en el VPS, hazlo solo para pruebas y commitea allí antes del siguiente despliegue:
+`deploy.sh` fuerza el checkout y descarta lo no commiteado del VPS.
+
 - Destino: `/opt/stacks/pagina-kathatenorio` (repo Git, rama `main`)
 - Proxy: `/opt/stacks/system-nginxproxy`
 - Vídeos: `/opt/media/kathatenorio/videos` (bind mount read-only; fuera de la imagen)
