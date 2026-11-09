@@ -1,4 +1,6 @@
 ---
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import '../styles/global.css';
 import { profile, asset } from '../content/kit';
 
@@ -14,6 +16,13 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(asset('/fotos/og-katha.png'), Astro.site).href;
 const profileImage = new URL(profile.photo, Astro.site).href;
+
+// Versión del favicon según su contenido: evita que navegadores y Cloudflare
+// sigan mostrando el icono viejo durante 30 días tras cambiarlo.
+const faviconVersion = createHash('sha256')
+  .update(readFileSync(new URL('../../public/favicon.svg', import.meta.url)))
+  .digest('hex')
+  .slice(0, 8);
 
 // Teléfono legible a partir del número internacional (+56958561105).
 const digits = profile.whatsapp.replace(/\D/g, '');
@@ -59,7 +68,7 @@ const personJsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="theme-color" content="#ff3d9a" />
-    <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <link rel="icon" type="image/svg+xml" href={`${asset('/favicon.svg')}?v=${faviconVersion}`} />
     <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
