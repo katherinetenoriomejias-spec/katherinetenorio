@@ -3,8 +3,8 @@
 Media kit digital, profesional y femenino, con **estadísticas reales de Instagram y TikTok
 que se actualizan solas**.
 
-- **Stack:** Astro 5 (SSR) + Vercel adapter + API propia. Sin frameworks de UI: HTML, CSS y
-  un script mínimo de refresco.
+- **Stack:** Astro 5 (build estático) + nginx en un VPS, con Cloudflare delante.
+  Sin frameworks de UI: HTML, CSS y un script mínimo de refresco.
 - **Contenido editable:** todo el copy, la galería y las colaboraciones viven en
   `src/content/kit.ts` — se edita sin tocar componentes.
 
@@ -18,9 +18,10 @@ npm run build
 
 ## Estadísticas en vivo
 
-El panel de la sección **Estadísticas** llama a `GET /api/stats`, que lee de las APIs
-oficiales. Con los tokens configurados, los datos aparecen solos y se refrescan cada
-5 minutos en el navegador.
+El panel de la sección **Estadísticas** se genera en el build a partir de
+`public/data/social.json` y luego se refresca en el navegador leyendo ese mismo
+archivo. No requiere backend ni tokens: Katha pega ahí los últimos números reales
+y la web los muestra al instante.
 
 ### 1. Instagram (Graph API)
 
@@ -82,15 +83,25 @@ Las imágenes van en `public/fotos/`. Hay un generador de placeholders para prob
 python3 scripts/placeholders.py
 ```
 
-## Despliegue (Vercel)
+## Despliegue (VPS + nginx-proxy)
 
-1. `npm i -g vercel` y `vercel` en la carpeta, o importá el repo en Vercel.
-2. Configurá las variables de entorno (`IG_ACCESS_TOKEN`, `IG_USER_ID`,
-   `TIKTOK_ACCESS_TOKEN`) en **Settings → Environment Variables**.
-3. `vercel --prod`.
+El sitio se sirve como build estático de Astro detrás de `nginxproxy/nginx-proxy`
+con certificado de Let's Encrypt gestionado por `acme-companion`.
 
-El build ya usa `@astrojs/vercel` con `output: 'server'`, así que el endpoint
-`/api/stats` funciona como función serverless.
+```bash
+./deploy.sh                       # sincroniza, construye y levanta en el VPS
+DEPLOY_HOST=kathavps-root ./deploy.sh
+```
+
+- Destino: `/opt/stacks/pagina-kathatenorio`
+- Proxy: `/opt/stacks/system-nginxproxy`
+- Vídeos: `/opt/media/kathatenorio/videos` (bind mount read-only; fuera de la imagen)
+- Dominio: `https://kathatenorio.com` (Cloudflare → VPS)
+- El `.env` del VPS define `VIRTUAL_HOST` y `LETSENCRYPT_HOST`; no se sobrescribe
+  en cada despliegue.
+
+Las estadísticas del panel se leen de `public/data/social.json`; para actualizarlas
+basta editar ese archivo y volver a desplegar.
 
 ## Accesibilidad
 

@@ -1,0 +1,16 @@
+node_modules
+dist
+.astro
+.vercel
+.git
+.github
+__pycache__
+*.pyc
+.DS_Store
+.env
+.env.*
+!.env.example
+deploy.sh
+README.md
+scripts
+public/videos

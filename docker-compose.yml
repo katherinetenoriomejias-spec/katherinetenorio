@@ -1,0 +1,28 @@
+name: pagina-kathatenorio
+
+services:
+  web:
+    build:
+      context: .
+    image: pagina-kathatenorio:latest
+    container_name: pagina-kathatenorio
+    restart: unless-stopped
+    environment:
+      # Host(s) por los que responde la web, separados por coma.
+      VIRTUAL_HOST: ${VIRTUAL_HOST:-13.140.216.193}
+      VIRTUAL_PORT: "80"
+      # Solo dominios reales (sin IP). Vacío = sin certificado.
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST:-}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-}
+    expose:
+      - "80"
+    volumes:
+      # Los vídeos viven fuera de la imagen para que los deploys sean ligeros.
+      - /opt/media/kathatenorio/videos:/usr/share/nginx/html/videos:ro
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: proxy

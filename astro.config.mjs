@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://katherinetenoriomejias-spec.github.io',
-  base: '/portafolio/',
+  site: 'https://kathatenorio.com',
+  base: '/',
   output: 'static',
   image: {
     remotePatterns: [],
