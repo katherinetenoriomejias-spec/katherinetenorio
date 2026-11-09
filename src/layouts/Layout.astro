@@ -10,6 +10,32 @@ const {
   title = `${profile.name} — Media Kit`,
   description = profile.tagline,
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(asset('/fotos/og-katha.png'), Astro.site).href;
+const profileImage = new URL(profile.photo, Astro.site).href;
+
+// Teléfono legible a partir del número internacional (+56958561105).
+const digits = profile.whatsapp.replace(/\D/g, '');
+const whatsappPretty =
+  digits.length === 11 ? `+${digits.slice(0, 2)} ${digits[2]} ${digits.slice(3, 7)} ${digits.slice(7)}` : profile.whatsapp;
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role,
+  description: profile.tagline,
+  email: `mailto:${profile.email}`,
+  url: canonical,
+  image: profileImage,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Santiago',
+    addressCountry: 'CL',
+  },
+  sameAs: [profile.social.instagramUrl, profile.social.tiktokUrl],
+};
 ---
 
 <!doctype html>
@@ -18,10 +44,23 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="profile" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={`${profile.name} — Media Kit`} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name} — Media kit`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#ff3d9a" />
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -36,13 +75,13 @@ const {
         <a class="brand" href="#top" aria-label="Volver al inicio">
           <img
             class="brand-logo"
-            src={asset('/fotos/logo-katha.webp')}
+            src={asset('/fotos/logo-katha.svg')}
             alt="Katha Tenorio"
-            width="600"
-            height="205"
+            width="1476"
+            height="500"
           />
         </a>
-        <nav class="nav-links" aria-label="Secciones del media kit">
+        <nav class="nav-links" id="site-nav" aria-label="Secciones del media kit">
           <a href="#stats">Estadísticas</a>
           <a href="#proposito">Propósito</a>
           <a href="#proyectos">Proyectos</a>
@@ -50,7 +89,16 @@ const {
           <a href="#conferencias">Conferencias</a>
           <a href="#contacto">Contacto</a>
         </nav>
-        <a class="btn btn-pink" href="#contacto">Trabajemos juntos</a>
+        <a class="btn btn-pink header-cta" href="#contacto">Trabajemos juntos</a>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="Abrir menú"
+        >
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </header>
 
@@ -64,11 +112,44 @@ const {
         <div class="social">
           <a href={profile.social.instagramUrl} target="_blank" rel="noopener">{profile.social.instagram}</a>
           <a href={profile.social.tiktokUrl} target="_blank" rel="noopener">{profile.social.tiktok}</a>
+          <a class="footer-wa" href={profile.whatsappUrl} target="_blank" rel="noopener">
+            WhatsApp {whatsappPretty}
+          </a>
+          <a
+            class="footer-address"
+            href="https://www.google.com/maps/search/?api=1&query=Las+Condes+Santiago+de+Chile"
+            target="_blank"
+            rel="noopener"
+          >
+            {profile.location}
+          </a>
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
           <a href={asset('/terms/')}>Términos</a>
           <a href={asset('/privacy/')}>Privacidad</a>
         </div>
       </div>
     </footer>
+
+    <script>
+      // Menú móvil: despliega la navegación por debajo de la cabecera.
+      const navToggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+      const siteNav = document.getElementById('site-nav');
+      if (navToggle && siteNav) {
+        const setOpen = (open: boolean) => {
+          siteNav.classList.toggle('is-open', open);
+          navToggle.setAttribute('aria-expanded', String(open));
+          navToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+        };
+        navToggle.addEventListener('click', () => {
+          setOpen(!siteNav.classList.contains('is-open'));
+        });
+        siteNav.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => setOpen(false));
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') setOpen(false);
+        });
+      }
+    </script>
   </body>
 </html>

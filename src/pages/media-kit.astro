@@ -1,0 +1,252 @@
+---
+import { readFileSync } from 'node:fs';
+import { profile, asset, packages, services, talks, purpose } from '../content/kit';
+
+const social = JSON.parse(
+  readFileSync(new URL('../../public/data/social.json', import.meta.url), 'utf8'),
+);
+const fmt = (value: number | null | undefined) =>
+  value === null || value === undefined ? '—' : new Intl.NumberFormat('es-ES').format(value);
+const short = (value: number | null | undefined) => {
+  if (value === null || value === undefined) return '—';
+  if (value >= 1000000) return `${(value / 1000000).toFixed(1).replace('.', ',')} M`;
+  if (value >= 1000) return `${Math.round(value / 1000)} K`;
+  return String(value);
+};
+const updated = new Date(social.updatedAt).toLocaleDateString('es-CL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const stats = [
+  { label: 'Seguidores en Instagram', value: short(social.instagram.followers) },
+  { label: 'Seguidores en TikTok', value: short(social.tiktok.followers) },
+  { label: 'Me gusta en TikTok', value: short(social.tiktok.likes) },
+  { label: 'Publicaciones en Instagram', value: fmt(social.instagram.posts) },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{profile.name} — Media kit (PDF)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #16131a;
+        --muted: #6b6470;
+        --line: rgba(22, 19, 26, 0.14);
+        --pink: #ff3d9a;
+        --paper: #fdfbf8;
+        --plum: #2b1430;
+        --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        --display: 'Cormorant Garamond', Georgia, serif;
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body {
+        margin: 0;
+        background: #ece7e1;
+        color: var(--ink);
+        font-family: var(--font);
+        line-height: 1.5;
+        font-size: 12px;
+      }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 12mm auto;
+        padding: 14mm 14mm 12mm;
+        background: var(--paper);
+        box-shadow: 0 10px 40px rgba(22, 19, 26, 0.18);
+        position: relative;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10mm;
+        padding-bottom: 6mm;
+        border-bottom: 2px solid var(--pink);
+      }
+      .top img { height: 13mm; width: auto; }
+      .top small {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 8px;
+        color: var(--muted);
+        font-weight: 600;
+        text-align: right;
+      }
+      h1 {
+        font-family: var(--display);
+        font-size: 34px;
+        font-weight: 600;
+        margin: 7mm 0 1mm;
+        letter-spacing: -0.01em;
+      }
+      .role { color: var(--pink); font-weight: 600; font-size: 11px; letter-spacing: 0.02em; }
+      .tagline { font-size: 12px; color: var(--muted); margin: 3mm 0 0; max-width: 150mm; }
+      h2 {
+        font-family: var(--display);
+        font-size: 20px;
+        margin: 8mm 0 3mm;
+        padding-bottom: 1.5mm;
+        border-bottom: 1px solid var(--line);
+      }
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-top: 4mm; }
+      .stat { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 3mm; }
+      .stat b { display: block; font-family: var(--display); font-size: 22px; line-height: 1.1; color: var(--plum); }
+      .stat span { font-size: 8.5px; color: var(--muted); }
+      .packs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+      .pack { border: 1px solid var(--line); border-radius: 8px; padding: 3mm; background: #fff; }
+      .pack.featured { border-color: var(--pink); }
+      .pack h3 { margin: 0; font-size: 12px; }
+      .pack .price { color: var(--pink); font-weight: 700; font-size: 13px; margin: 1mm 0 2mm; }
+      .pack ul { margin: 0; padding-left: 4mm; font-size: 9.5px; color: #3c3840; }
+      .pack li { margin-bottom: 1mm; }
+      .talks { columns: 2; column-gap: 8mm; }
+      .talk { break-inside: avoid; margin-bottom: 3.5mm; }
+      .talk b { display: block; font-size: 10.5px; }
+      .talk span { font-size: 9.5px; color: var(--muted); white-space: pre-line; }
+      .talk em { color: var(--pink); font-style: normal; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+      .contact { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2mm 8mm; margin-top: 2mm; }
+      .contact div { font-size: 10px; }
+      .contact b { display: block; font-size: 7.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+      .note { margin-top: 4mm; font-size: 9px; color: var(--muted); }
+      .foot {
+        margin-top: 8mm;
+        padding-top: 3mm;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        font-size: 8.5px;
+        color: var(--muted);
+      }
+      .print-bar {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        gap: 8px;
+      }
+      .print-bar button,
+      .print-bar a {
+        font: inherit;
+        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--pink);
+        background: var(--pink);
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .print-bar a { background: #fff; color: var(--pink); }
+      @page { size: A4; margin: 0; }
+      @media print {
+        body { background: #fff; }
+        .page { margin: 0; box-shadow: none; width: 210mm; min-height: 297mm; }
+        .page + .page { break-before: page; }
+        .print-bar { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-bar">
+      <button type="button" onclick="window.print()">Descargar / imprimir PDF</button>
+      <a href={asset('/')}>Volver a la web</a>
+    </div>
+
+    <section class="page">
+      <div class="top">
+        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
+        <small>Media kit · {updated}</small>
+      </div>
+
+      <h1>{profile.name}</h1>
+      <p class="role">{profile.role}</p>
+      <p class="tagline">{profile.tagline}</p>
+
+      <h2>En números</h2>
+      <div class="stats">
+        {stats.map((stat) => (
+          <div class="stat">
+            <b>{stat.value}</b>
+            <span>{stat.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <h2>Paquetes de colaboración</h2>
+      <div class="packs">
+        {packages.map((pack) => (
+          <div class:list={['pack', { featured: pack.featured }]}>
+            <h3>{pack.name}</h3>
+            <p class="price">{pack.price}</p>
+            <ul>
+              {pack.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <p class="note">
+        Los valores no incluyen derechos de uso extendidos (+40%) ni exclusividad de categoría (+25%).
+        Los trabajos urgentes tienen un recargo del 25%. Valores en USD, referenciales.
+      </p>
+
+      <h2>Propósito</h2>
+      <p style="margin: 0; font-size: 10.5px; color: #3c3840;">{purpose.text}</p>
+
+      <div class="foot">
+        <span>{profile.name} · Media kit</span>
+        <span>{profile.social.instagram} · {profile.social.tiktok}</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="top">
+        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
+        <small>Conferencias y contacto</small>
+      </div>
+
+      <h2 style="margin-top: 6mm;">Ponencias en español</h2>
+      <div class="talks">
+        {talks.map((talk) => (
+          <div class="talk">
+            <em>{talk.tag}</em>
+            <b>{talk.title}</b>
+            <span>{talk.text}</span>
+          </div>
+        ))}
+      </div>
+      <p class="note">
+        Todos los espacios deben ser accesibles: rampas, baño y transporte accesible.
+      </p>
+
+      <h2>Contacto</h2>
+      <div class="contact">
+        <div><b>Email</b>{profile.email}</div>
+        <div><b>WhatsApp</b>{profile.whatsapp}</div>
+        <div><b>Instagram</b>{profile.social.instagram}</div>
+        <div><b>TikTok</b>{profile.social.tiktok}</div>
+        <div><b>Ubicación</b>{profile.location}</div>
+        <div><b>Web</b>katherinetenoriomejias-spec.github.io/portafolio</div>
+      </div>
+
+      <div class="foot">
+        <span>Respuesta en menos de 24 horas.</span>
+        <span>{profile.name} · Media kit</span>
+      </div>
+    </section>
+  </body>
+</html>

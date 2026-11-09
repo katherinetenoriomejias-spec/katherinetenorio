@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://katherinetenoriomejias-spec.github.io/portafolio/sitemap.xml
