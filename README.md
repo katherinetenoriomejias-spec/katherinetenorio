@@ -89,11 +89,16 @@ El sitio se sirve como build estático de Astro detrás de `nginxproxy/nginx-pro
 con certificado de Let's Encrypt gestionado por `acme-companion`.
 
 ```bash
-./deploy.sh                       # sincroniza, construye y levanta en el VPS
+./deploy.sh                       # push a Git + checkout, build y levanta en el VPS
 DEPLOY_HOST=kathavps-root ./deploy.sh
 ```
 
-- Destino: `/opt/stacks/pagina-kathatenorio`
+`deploy.sh` exige el árbol local limpio, hace `git push` a `kathatenorio/main`,
+actualiza el checkout del VPS por HTTPS, conserva el `.env`, reconstruye la imagen
+y levanta el contenedor. Los vídeos no se incluyen: se sincronizan aparte con
+`./deploy-media.sh`.
+
+- Destino: `/opt/stacks/pagina-kathatenorio` (repo Git, rama `main`)
 - Proxy: `/opt/stacks/system-nginxproxy`
 - Vídeos: `/opt/media/kathatenorio/videos` (bind mount read-only; fuera de la imagen)
 - Dominio: `https://kathatenorio.com` (Cloudflare → VPS)

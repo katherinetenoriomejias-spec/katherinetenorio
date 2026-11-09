@@ -26,28 +26,25 @@ El `.env` del VPS no se toca al desplegar.
 
 ## Actualizar el sitio
 
-### Opción A — desde el repo (si GitHub está configurado)
-
-```bash
-cd /opt/stacks/pagina-kathatenorio
-git pull
-docker compose up -d --build
-```
-
-Antes de `git pull`, confirma que la rama desplegada tiene el `astro.config.mjs` correcto
-(`site: 'https://kathatenorio.com'`, `base: '/'`, `output: 'static'`). La rama remota
-`kathatenorio/main` llegó a tener `base: '/portafolio/'` para GitHub Pages.
-
-### Opción B — desde la máquina de desarrollo (scp)
-
-En el Mac, dentro del proyecto:
+El despliegue normal se hace desde el Mac, con el árbol limpio (todo commiteado):
 
 ```bash
 ./deploy.sh
 ```
 
-Empaqueta el proyecto, lo sube con `scp`, extrae en `/opt/stacks/pagina-kathatenorio`
-(conserva `.env`), reconstruye la imagen y levanta el contenedor. **No sube los vídeos.**
+El script hace `git push` de `HEAD` a `kathatenorio/main`, actualiza el checkout de
+`/opt/stacks/pagina-kathatenorio` en el VPS por HTTPS (conserva `.env` y hace
+`git clean -fd`), reconstruye la imagen y levanta el contenedor. **No sube los vídeos.**
+
+En el VPS también se puede actualizar a mano:
+
+```bash
+cd /opt/stacks/pagina-kathatenorio
+git fetch origin main && git checkout -f -B main origin/main
+docker compose up -d --build
+```
+
+El repo del VPS lee por HTTPS; no depende de la clave SSH de GitHub.
 
 ### Actualizar solo los vídeos
 
@@ -79,7 +76,7 @@ Esperado: título `Katha Tenorio — Media Kit`, rutas 200 y contenedor `healthy
 | Se ve la web vieja | caché de Cloudflare o build antiguo | reconstruir y purgar caché en Cloudflare |
 | HTTPS no responde | certificado no emitido | `docker logs acme-companion` |
 | Cambios no aparecen | falta rebuild | `docker compose up -d --build` (no basta `restart`) |
-| `git pull` falla con publickey | clave SSH de GitHub no asociada a `kath` | registrar la clave o desplegar por `scp` |
+| `git fetch` falla en el VPS | `origin` no apunta al repo o no hay red | `git -C /opt/stacks/pagina-kathatenorio remote -v`; reintentar `./deploy.sh` |
 
 ## Reglas
 

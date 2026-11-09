@@ -70,14 +70,14 @@ echo | openssl s_client -servername kathatenorio.com -connect kathatenorio.com:4
 
 ## Git / despliegue
 
-- La clave SSH de GitHub debe estar registrada **para el usuario que ejecuta git** (normalmente `kath`).
-  Verifica con `ssh -T git@github.com`; debe responder `Hi <usuario>!`.
-- Estado conocido: la clave puede estar registrada en otra cuenta/usuario. Si `kath` recibe
-  `Permission denied (publickey)`, no intentes `git pull`: usa el despliegue por `scp`/`rsync`
-  desde la máquina de desarrollo o registra la clave correcta.
-- Repositorio del proyecto: `katherinetenoriomejias-spec/katherinetenorio.git`.
-  **Ojo:** la rama `main` remota puede estar desactualizada respecto al contenido desplegado
-  (tuvo `base: /portafolio/` para GitHub Pages). No hagas `git pull` a ciegas sobre producción.
+- El checkout de producción vive en `/opt/stacks/pagina-kathatenorio` y lee el repo por
+  **HTTPS** (`https://github.com/katherinetenoriomejias-spec/katherinetenorio.git`);
+  no depende de la clave SSH de GitHub del usuario `kath`.
+- Repositorio del proyecto: `katherinetenoriomejias-spec/katherinetenorio.git`, rama `main`.
+- Para desplegar lo último, desde el Mac: `./deploy.sh` (hace push, fetch/checkout en el
+  VPS, reconstruye y levanta). El `.env` se conserva porque está en `.gitignore`.
+- Para actualizar a mano en el VPS:
+  `git fetch origin main && git checkout -f -B main origin/main && docker compose up -d --build`.
 
 ## No hacer
 
