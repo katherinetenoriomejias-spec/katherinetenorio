@@ -21,7 +21,15 @@ const featured = Boolean(colab.photos?.length);
           preload="none"
           playsinline
           aria-label={`Video de ${colab.brand}`}
-        />
+        >
+          <track
+            kind="captions"
+            srclang="es"
+            label="Español"
+            default
+            src={`${colab.video.src.replace(/\.mp4$/, '')}.es.vtt`}
+          />
+        </video>
       ) : (
         <img
           src={thumbOf(colab.image)}
