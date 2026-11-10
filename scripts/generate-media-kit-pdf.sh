@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Genera public/media-kit-katha-tenorio.pdf a partir de la página /media-kit/.
 # Requisitos: Node (npm) o Bun, python3 y Google Chrome.
+# Opcional: sips (macOS) para generar las versiones JPEG ligeras que usa el PDF.
 #
 # Uso:
 #   ./scripts/generate-media-kit-pdf.sh
@@ -28,6 +29,29 @@ if [ ! -x "$CHROME_BIN" ]; then
   echo "ERROR: Chrome no encontrado en '$CHROME_BIN'." >&2
   echo "Definí CHROME_BIN con la ruta al ejecutable de Chrome." >&2
   exit 1
+fi
+
+echo "==> Optimizando imágenes para el PDF"
+if command -v sips >/dev/null 2>&1; then
+  mkdir -p "$ROOT/public/fotos/pdf/instagram" "$ROOT/public/fotos/pdf/tiktok"
+  for dir in instagram tiktok; do
+    for f in "$ROOT/public/fotos/$dir"/*.webp; do
+      [ -e "$f" ] || continue
+      out="$ROOT/public/fotos/pdf/$dir/$(basename "${f%.webp}").jpg"
+      if [ ! -f "$out" ] || [ "$f" -nt "$out" ]; then
+        sips -s format jpeg -s formatOptions 78 --resampleWidth 640 "$f" --out "$out" >/dev/null
+      fi
+    done
+  done
+  for n in 1 2 3; do
+    f="$ROOT/public/fotos/katha-$n.webp"
+    out="$ROOT/public/fotos/pdf/katha-$n.jpg"
+    if [ -f "$f" ] && { [ ! -f "$out" ] || [ "$f" -nt "$out" ]; }; then
+      sips -s format jpeg -s formatOptions 80 --resampleWidth 700 "$f" --out "$out" >/dev/null
+    fi
+  done
+else
+  echo "AVISO: sips no está disponible; se usan las imágenes JPEG existentes."
 fi
 
 echo "==> Construyendo el sitio"

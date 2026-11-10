@@ -1,6 +1,6 @@
 ---
 import { readFileSync } from 'node:fs';
-import { profile, asset, services, talks, purpose } from '../content/kit';
+import { profile, asset, services, talks, purpose, instagramShots, tiktokShots } from '../content/kit';
 
 const social = JSON.parse(
   readFileSync(new URL('../../public/data/social.json', import.meta.url), 'utf8'),
@@ -18,6 +18,8 @@ const updated = new Date(social.updatedAt).toLocaleDateString('es-CL', {
   month: 'long',
   year: 'numeric',
 });
+/** Versión JPEG ligera de una imagen, para que el PDF no pese de más. */
+const pdfImg = (src: string) => src.replace('/fotos/', '/fotos/pdf/').replace(/\.webp$/, '.jpg');
 
 const stats = [
   { label: 'Seguidores en Instagram', value: short(social.instagram.followers) },
@@ -99,11 +101,16 @@ const stats = [
       h2 {
         font-family: var(--display);
         font-size: 20px;
-        margin: 8mm 0 3mm;
+        margin: 6mm 0 2.5mm;
         padding-bottom: 1.5mm;
         border-bottom: 1px solid var(--line);
       }
       .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-top: 4mm; }
+      .page.cover { display: flex; flex-direction: column; }
+      .page.cover .foot { margin-top: auto; }
+      .cover-shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin-top: 6mm; }
+      .cover-shot { margin: 0; overflow: hidden; border-radius: 6px; background: #fff; }
+      .cover-shot img { width: 100%; height: 84mm; object-fit: cover; object-position: center 25%; display: block; }
       .stat { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 3mm; }
       .stat b { display: block; font-family: var(--display); font-size: 22px; line-height: 1.1; color: var(--plum); }
       .stat span { font-size: 8.5px; color: var(--muted); }
@@ -121,18 +128,34 @@ const stats = [
       }
       .pack h3 { margin: 0 0 1.5mm; font-size: 12px; }
       .pack-text { margin: 0; font-size: 9.5px; color: #3c3840; white-space: pre-line; }
+      .shots-lead { margin: 0 0 3mm; font-size: 9px; color: var(--muted); }
+      .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm 4mm; }
+      .shot { margin: 0; break-inside: avoid; }
+      .shot-frame {
+        height: 90mm;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 1.5mm;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+      }
+      .shot-frame img { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; }
+      .shot figcaption { margin-top: 1.5mm; font-size: 7.5px; line-height: 1.35; color: var(--muted); }
+      .shot figcaption b { display: block; margin-bottom: 0.5mm; font-size: 8.5px; color: var(--ink); }
       .talks { columns: 2; column-gap: 8mm; }
-      .talk { break-inside: avoid; margin-bottom: 3.5mm; }
+      .talk { break-inside: avoid; margin-bottom: 3mm; }
       .talk b { display: block; font-size: 10.5px; }
       .talk span { font-size: 9.5px; color: var(--muted); white-space: pre-line; }
       .talk em { color: var(--pink); font-style: normal; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-      .contact { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2mm 8mm; margin-top: 2mm; }
+      .contact { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5mm 8mm; margin-top: 2mm; }
       .contact div { font-size: 10px; }
       .contact b { display: block; font-size: 7.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
-      .note { margin-top: 4mm; font-size: 9px; color: var(--muted); }
+      .note { margin-top: 3mm; font-size: 9px; color: var(--muted); }
       .note-strong { color: var(--ink); font-size: 9.5px; font-weight: 500; }
       .foot {
-        margin-top: 8mm;
+        margin-top: 6mm;
         padding-top: 3mm;
         border-top: 1px solid var(--line);
         display: flex;
@@ -175,7 +198,7 @@ const stats = [
       <a href={asset('/')}>Volver a la web</a>
     </div>
 
-    <section class="page">
+    <section class="page cover">
       <div class="top">
         <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
         <small>Media kit · {updated}</small>
@@ -184,6 +207,14 @@ const stats = [
       <h1>{profile.name}</h1>
       <p class="role">{profile.role}</p>
       <p class="tagline">{profile.tagline}</p>
+
+      <div class="cover-shots">
+        {profile.photos.slice(0, 3).map((photo) => (
+          <figure class="cover-shot">
+            <img src={pdfImg(photo.src)} alt={photo.alt} />
+          </figure>
+        ))}
+      </div>
 
       <h2>En números</h2>
       <div class="stats">
@@ -195,7 +226,78 @@ const stats = [
         ))}
       </div>
 
-      <h2>Paquetes de colaboración</h2>
+      <h2>Propósito</h2>
+      <p style="margin: 0; font-size: 10.5px; color: #3c3840;">{purpose.text}</p>
+
+      <div class="foot">
+        <span>{profile.name} · Media kit</span>
+        <span>{profile.social.instagram} · {profile.social.tiktok}</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="top">
+        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
+        <small>Estadísticas reales · Instagram</small>
+      </div>
+
+      <h2 style="margin-top: 6mm;">Instagram</h2>
+      <p class="shots-lead">Cifras oficiales de la cuenta al {updated}.</p>
+      <div class="shots">
+        {instagramShots.map((shot) => (
+          <figure class="shot">
+            <div class="shot-frame">
+              <img src={pdfImg(shot.src)} alt={shot.alt} decoding="async" />
+            </div>
+            <figcaption>
+              <b>{shot.title}</b>
+              <span>{shot.caption}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="foot">
+        <span>Datos al {updated}.</span>
+        <span>{profile.social.instagram}</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="top">
+        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
+        <small>Estadísticas reales · TikTok</small>
+      </div>
+
+      <h2 style="margin-top: 6mm;">TikTok</h2>
+      <p class="shots-lead">Cifras oficiales de la cuenta al {updated}.</p>
+      <div class="shots">
+        {tiktokShots.map((shot) => (
+          <figure class="shot">
+            <div class="shot-frame">
+              <img src={pdfImg(shot.src)} alt={shot.alt} decoding="async" />
+            </div>
+            <figcaption>
+              <b>{shot.title}</b>
+              <span>{shot.caption}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="foot">
+        <span>Datos al {updated}.</span>
+        <span>{profile.social.tiktok}</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="top">
+        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
+        <small>Paquetes y conferencias</small>
+      </div>
+
+      <h2 style="margin-top: 6mm;">Paquetes de colaboración</h2>
       <div class="packs">
         {services.map((service) => (
           <div class="pack">
@@ -210,22 +312,7 @@ const stats = [
         Entrega urgente (menos de 5 días): +25%.
       </p>
 
-      <h2>Propósito</h2>
-      <p style="margin: 0; font-size: 10.5px; color: #3c3840;">{purpose.text}</p>
-
-      <div class="foot">
-        <span>{profile.name} · Media kit</span>
-        <span>{profile.social.instagram} · {profile.social.tiktok}</span>
-      </div>
-    </section>
-
-    <section class="page">
-      <div class="top">
-        <img src={asset('/fotos/logo-katha.svg')} alt="Katha Tenorio" />
-        <small>Conferencias y contacto</small>
-      </div>
-
-      <h2 style="margin-top: 6mm;">Ponencias en español</h2>
+      <h2>Ponencias en español</h2>
       <div class="talks">
         {talks.slice(0, 8).map((talk) => (
           <div class="talk">
