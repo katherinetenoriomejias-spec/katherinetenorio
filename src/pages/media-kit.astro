@@ -1,6 +1,6 @@
 ---
 import { readFileSync } from 'node:fs';
-import { profile, asset, packages, services, talks, purpose } from '../content/kit';
+import { profile, asset, services, talks, purpose } from '../content/kit';
 
 const social = JSON.parse(
   readFileSync(new URL('../../public/data/social.json', import.meta.url), 'utf8'),
@@ -110,9 +110,17 @@ const stats = [
       .packs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
       .pack { border: 1px solid var(--line); border-radius: 8px; padding: 3mm; background: #fff; }
       .pack.featured { border-color: var(--pink); }
-      .pack h3 { margin: 0; font-size: 12px; }
-      .pack ul { margin: 0; padding-left: 4mm; font-size: 9.5px; color: #3c3840; }
-      .pack li { margin-bottom: 1mm; }
+      .pack-tag {
+        display: block;
+        color: var(--pink);
+        font-size: 7.5px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 1mm;
+      }
+      .pack h3 { margin: 0 0 1.5mm; font-size: 12px; }
+      .pack-text { margin: 0; font-size: 9.5px; color: #3c3840; white-space: pre-line; }
       .talks { columns: 2; column-gap: 8mm; }
       .talk { break-inside: avoid; margin-bottom: 3.5mm; }
       .talk b { display: block; font-size: 10.5px; }
@@ -188,12 +196,11 @@ const stats = [
 
       <h2>Paquetes de colaboración</h2>
       <div class="packs">
-        {packages.map((pack) => (
-          <div class:list={['pack', { featured: pack.featured }]}>
-            <h3>{pack.name}</h3>
-            <ul>
-              {pack.items.map((item) => <li>{item}</li>)}
-            </ul>
+        {services.map((service) => (
+          <div class="pack">
+            <span class="pack-tag">{service.tag}</span>
+            <h3>{service.title}</h3>
+            <p class="pack-text">{service.text}</p>
           </div>
         ))}
       </div>
@@ -219,7 +226,7 @@ const stats = [
 
       <h2 style="margin-top: 6mm;">Ponencias en español</h2>
       <div class="talks">
-        {talks.map((talk) => (
+        {talks.slice(0, 8).map((talk) => (
           <div class="talk">
             <em>{talk.tag}</em>
             <b>{talk.title}</b>
@@ -238,7 +245,7 @@ const stats = [
         <div><b>Instagram</b>{profile.social.instagram}</div>
         <div><b>TikTok</b>{profile.social.tiktok}</div>
         <div><b>Ubicación</b>{profile.location}</div>
-        <div><b>Web</b>katherinetenoriomejias-spec.github.io/portafolio</div>
+        <div><b>Web</b>kathatenorio.com</div>
       </div>
 
       <div class="foot">
