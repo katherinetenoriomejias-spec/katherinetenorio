@@ -111,7 +111,6 @@ const stats = [
       .pack { border: 1px solid var(--line); border-radius: 8px; padding: 3mm; background: #fff; }
       .pack.featured { border-color: var(--pink); }
       .pack h3 { margin: 0; font-size: 12px; }
-      .pack .price { color: var(--pink); font-weight: 700; font-size: 13px; margin: 1mm 0 2mm; }
       .pack ul { margin: 0; padding-left: 4mm; font-size: 9.5px; color: #3c3840; }
       .pack li { margin-bottom: 1mm; }
       .talks { columns: 2; column-gap: 8mm; }
@@ -192,7 +191,6 @@ const stats = [
         {packages.map((pack) => (
           <div class:list={['pack', { featured: pack.featured }]}>
             <h3>{pack.name}</h3>
-            <p class="price">{pack.price}</p>
             <ul>
               {pack.items.map((item) => <li>{item}</li>)}
             </ul>
@@ -200,8 +198,8 @@ const stats = [
         ))}
       </div>
       <p class="note">
-        Los valores no incluyen derechos de uso extendidos (+40%) ni exclusividad de categoría (+25%).
-        Los trabajos urgentes tienen un recargo del 25%. Valores en USD, referenciales.
+        Cada propuesta se cotiza según el alcance del proyecto. Los derechos de uso extendidos,
+        la exclusividad de categoría y los trabajos urgentes se presupuestan aparte.
       </p>
 
       <h2>Propósito</h2>

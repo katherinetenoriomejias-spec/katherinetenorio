@@ -211,19 +211,17 @@ export interface MediaPackage {
   id: string;
   name: string;
   tagline: string;
-  price: string;
   featured?: boolean;
   items: string[];
   notes: string[];
 }
 
-/** Propuestas para marcas: los precios son referenciales y se editan aquí. */
+/** Propuestas para marcas: contenido y condiciones; los precios se cotizan aparte. */
 export const packages: MediaPackage[] = [
   {
     id: 'ajam',
     name: 'Plan Ajam',
     tagline: 'Para empezar a trabajar juntos',
-    price: 'USD 900',
     items: [
       '1 video publicado en colaboración en Instagram y TikTok',
       '1 sesión de fotografía (medio día, 4 imágenes finales)',
@@ -239,7 +237,6 @@ export const packages: MediaPackage[] = [
     id: 'bueno',
     name: 'Plan Bueno',
     tagline: 'Más presencia, más contenido',
-    price: 'USD 2.200',
     featured: true,
     items: [
       '3 videos publicados en colaboración en Instagram y TikTok',
@@ -257,7 +254,6 @@ export const packages: MediaPackage[] = [
     id: 'conferencias',
     name: 'Plan Conferencias',
     tagline: 'Tu voz en eventos y conferencias',
-    price: 'USD 3.500',
     items: [
       '1 conferencia o panel (hasta 45 minutos)',
       'Preparación de contenido y material visual propio',
