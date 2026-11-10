@@ -33,6 +33,9 @@ npm run build   # genera dist/
 - El puerto **4331** corresponde a un preview viejo; no lo uses para validar cambios.
 - Los vídeos se ven desde `public/videos/` en local. En producción **no van en la imagen**:
   viven en `/opt/media/kathatenorio/videos` y se sincronizan con `./deploy-media.sh`.
+- El PDF descargable es un archivo estático: `public/media-kit-katha-tenorio.pdf`.
+  Regeneralo con `./scripts/generate-media-kit-pdf.sh` (requiere Google Chrome) cuando
+  cambie el contenido del media kit.
 
 ### Favicon y caché
 

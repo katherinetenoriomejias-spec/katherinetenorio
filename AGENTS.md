@@ -24,6 +24,9 @@ Sitio en producción: **https://kathatenorio.com** (media kit de Katha Tenorio).
   VPS se monta `/opt/media/kathatenorio/videos` y se actualiza con `./deploy-media.sh`.
 - El favicon se versiona por hash en `Layout.astro`; tras cambiarlo basta rebuild.
   Cloudflare cachea los estáticos 30 días: purga la caché si el cambio no aparece.
+- El PDF descargable (`public/media-kit-katha-tenorio.pdf`) se genera desde `/media-kit/`
+  con `./scripts/generate-media-kit-pdf.sh` (requiere Chrome). Regenerarlo si cambia el
+  contenido; si no, el botón del hero descarga una versión vieja.
 
 ## Cómo se publica
 
